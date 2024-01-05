@@ -32,6 +32,17 @@ pub(crate) use param_struct;
 async fn main() -> Result<(), std::io::Error> {
     let mut server = tide::new();
 
+    /*let cors = tide::security::CorsMiddleware::new()
+        .allow_methods(
+            "GET, POST, OPTIONS"
+                .parse::<tide::http::headers::HeaderValue>()
+                .unwrap(),
+        )
+        .allow_origin(tide::security::Origin::from("*"))
+        .allow_credentials(false);
+
+    server.with(cors);*/
+
     server.at("/").get(|_| async move { Ok("/ route (root)") });
     server.at("/test").nest(test_router::new());
 
