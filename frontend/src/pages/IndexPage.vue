@@ -1,42 +1,31 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page class="row items-baseline">
+    <media-card v-for="item in media" :key="item.title" v-bind="item" />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {Todo, Meta} from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
-import {ref} from 'vue';
+import MediaCard from 'components/MediaCard.vue';
 
-const todos = ref<Todo[]>([
+const media = [
   {
-    id: 1,
-    content: 'ct1'
+    title: 'Harry Potter',
+    imageUrl:
+      'https://m.media-amazon.com/images/I/51TFQYub8mL._AC_UF894,1000_QL80_.jpg',
   },
   {
-    id: 2,
-    content: 'ct2'
+    title: 'Indiana Jones',
+    imageUrl: 'https://media1.jpc.de/image/w1155/front/0/4010884528381.jpg',
   },
   {
-    id: 3,
-    content: 'ct3'
+    title: 'Breaking Bad',
+    imageUrl:
+      'https://m.media-amazon.com/images/I/81CblaI0DuL._AC_UF894,1000_QL80_.jpg',
   },
   {
-    id: 4,
-    content: 'ct4'
+    title: 'Attack on Titan',
+    imageUrl:
+      'https://m.media-amazon.com/images/I/611RuT7PJ1L._AC_UF1000,1000_QL80_.jpg',
   },
-  {
-    id: 5,
-    content: 'ct5'
-  }
-]);
-const meta = ref<Meta>({
-  totalCount: 1200
-});
+];
 </script>
