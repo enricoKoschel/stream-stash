@@ -8,8 +8,8 @@
         <q-input
           v-model="searchText"
           label="Search"
-          filled
           clearable
+          dense
           style="width: 30rem"
         >
           <template v-slot:prepend>
