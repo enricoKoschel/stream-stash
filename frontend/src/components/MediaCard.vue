@@ -1,20 +1,66 @@
 <template>
-  <q-card
-    flat
-    @click="showClickAlert()"
-    style="margin: 0.5rem; width: 10rem; height: 17rem"
-  >
-    <q-card-section>
-      <q-img :src="imageUrl" style="width: 8rem; height: 12rem" />
-    </q-card-section>
+  <div @click="showClickAlert()" class="img_wrapper cursor-pointer">
+    <q-img :src="imageUrl" class="img_main" />
 
-    <div class="text-h6" style="text-align: center">{{ title }}</div>
-  </q-card>
+    <div class="img_text flex items-center justify-center" style="">
+      <p style="text-align: center">
+        {{ title }} <br />
+        ({{ year }})
+      </p>
+    </div>
+  </div>
 </template>
+
+<style scoped lang="scss">
+@import 'src/css/quasar.variables';
+
+$width: 8rem;
+$height: 12rem;
+$border-radius: 5px;
+$transition-duration: 0.2s;
+$background-color: rgba($dark, 0.75);
+$text-color: #fff;
+
+.img_wrapper {
+  width: $width;
+  height: $height;
+  margin: 1rem;
+  position: relative;
+
+  &:hover .img_text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.img_main,
+.img_text {
+  width: $width;
+  height: $height;
+  border-radius: $border-radius;
+}
+
+.img_text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: $background-color;
+  color: $text-color;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: opacity $transition-duration, visibility $transition-duration;
+}
+</style>
 
 <script setup lang="ts">
 interface Props {
   title: string;
+  year: number;
   imageUrl: string;
 }
 
