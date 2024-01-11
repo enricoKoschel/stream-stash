@@ -62,14 +62,20 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+
+      env: require('dotenv').config().parsed,
+
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        //https://stackoverflow.com/questions/77766068/quasar-vue-prod-hydration-mismatch-details-is-not-defined
+        viteConf.define.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false;
+      },
+
       // viteVuePluginOptions: {},
 
       // vitePlugins: [
@@ -80,7 +86,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
-      open: true, // opens browser window automatically
+      open: false, // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
