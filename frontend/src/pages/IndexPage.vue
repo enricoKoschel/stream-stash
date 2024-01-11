@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import MediaCard from 'components/MediaCard.vue';
+import { api } from 'boot/axios';
+
+const media: { title: string; year: number; imageUrl: string }[] = [];
+
+// TODO: Get/create list from logged in user
+const response = await api.get('/4/list/8286408');
+const data = response.data;
+
+for (const item of data.results) {
+  const commentIndex = `${item['media_type']}:${item['id']}`;
+  const comments = JSON.parse(data.comments[commentIndex]);
+  console.log(comments);
+
+  media.push({
+    title: item['name'] || item['title'],
+    year: parseInt(
+      (item['first_air_date'] || item['release_date']).slice(0, 4)
+    ),
+    imageUrl: `https://image.tmdb.org/t/p/w600_and_h900_bestv2/${item['poster_path']}`,
+  });
+}
+</script>
+
 <template>
   <q-page class="row items-baseline">
     <media-card v-for="item in media" :key="item.title" v-bind="item" />
@@ -5,34 +30,3 @@
 </template>
 
 <style scoped lang="scss"></style>
-
-<script setup lang="ts">
-import MediaCard from 'components/MediaCard.vue';
-
-const media = [
-  {
-    title: "Harry Potter and the Philosopher's Stone",
-    year: 2001,
-    imageUrl:
-      'https://m.media-amazon.com/images/I/51TFQYub8mL._AC_UF894,1000_QL80_.jpg',
-  },
-  {
-    title: 'Raiders of the Lost Ark',
-    year: 1981,
-    imageUrl:
-      'https://c8.alamy.com/compde/ryj00r/harrison-ford-dvd-cover-indiana-jones-und-die-jager-des-verlorenen-schatzes-1981-ryj00r.jpg',
-  },
-  {
-    title: 'Breaking Bad',
-    year: 2008,
-    imageUrl:
-      'https://m.media-amazon.com/images/I/81CblaI0DuL._AC_UF894,1000_QL80_.jpg',
-  },
-  {
-    title: 'Attack on Titan',
-    year: 2013,
-    imageUrl:
-      'https://m.media-amazon.com/images/I/611RuT7PJ1L._AC_UF1000,1000_QL80_.jpg',
-  },
-];
-</script>

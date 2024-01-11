@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const searchText = ref('');
+const selectedTab = ref('all');
+</script>
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
@@ -12,14 +19,14 @@
           dense
           style="width: 30rem"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <q-icon name="search" />
           </template>
         </q-input>
 
         <q-space />
 
-        <!-- TODO: Dropdown with login and profile, etc. -->
+        <!-- TODO: Dropdown with login, profile, about(TMDB credit) etc. -->
         <q-btn flat dense round icon="menu" />
       </q-toolbar>
       <q-toolbar class="bg-dark">
@@ -39,10 +46,3 @@
 </template>
 
 <style scoped lang="scss"></style>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const searchText = ref('');
-const selectedTab = ref('all');
-</script>

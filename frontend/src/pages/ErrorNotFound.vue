@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <div class="fullscreen text-white text-center q-pa-md flex flex-center">
     <div>
@@ -18,5 +20,3 @@
 </template>
 
 <style scoped lang="scss"></style>
-
-<script setup lang="ts"></script>

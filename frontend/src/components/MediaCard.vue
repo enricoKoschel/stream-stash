@@ -1,5 +1,19 @@
+<script setup lang="ts">
+interface Props {
+  title: string;
+  year: number;
+  imageUrl: string;
+}
+
+const props = defineProps<Props>();
+
+function showClickAlert() {
+  alert(`Clicked on ${props.title}`);
+}
+</script>
+
 <template>
-  <div @click="showClickAlert()" class="img_wrapper cursor-pointer">
+  <div class="img_wrapper cursor-pointer" @click="showClickAlert()">
     <q-img :src="imageUrl" class="img_main" />
 
     <div class="img_text flex items-center justify-center" style="">
@@ -56,17 +70,3 @@ $text-color: #fff;
   transition: opacity $transition-duration, visibility $transition-duration;
 }
 </style>
-
-<script setup lang="ts">
-interface Props {
-  title: string;
-  year: number;
-  imageUrl: string;
-}
-
-const props = defineProps<Props>();
-
-function showClickAlert() {
-  alert(`Clicked on ${props.title}`);
-}
-</script>
