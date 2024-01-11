@@ -14,7 +14,12 @@ function showClickAlert() {
 
 <template>
   <div class="img_wrapper cursor-pointer" @click="showClickAlert()">
-    <q-img :src="imageUrl" class="img_main" />
+    <q-img :src="imageUrl" class="img_main">
+      <template #error>
+        <!-- TODO: Actual error image -->
+        <q-img src="public/favicon.ico" class="img_main" />
+      </template>
+    </q-img>
 
     <div class="img_text flex items-center justify-center" style="">
       <p style="text-align: center">
