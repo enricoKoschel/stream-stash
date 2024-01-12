@@ -1,19 +1,19 @@
 <script setup lang="ts">
 interface Props {
+  id: number;
   title: string;
   year: number;
   imageUrl: string;
 }
 
 const props = defineProps<Props>();
-
-function showClickAlert() {
-  alert(`Clicked on ${props.title}`);
-}
 </script>
 
 <template>
-  <div class="img_wrapper cursor-pointer" @click="showClickAlert()">
+  <router-link
+    class="img_wrapper"
+    :to="{ name: 'mediaPage', params: { id: props.id } }"
+  >
     <q-img :src="imageUrl" class="img_main">
       <template #error>
         <div class="img_main row items-center justify-center">
@@ -28,7 +28,7 @@ function showClickAlert() {
         ({{ year }})
       </p>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <style scoped lang="scss">

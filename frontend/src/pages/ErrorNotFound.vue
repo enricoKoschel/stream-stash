@@ -9,7 +9,7 @@
 
       <q-btn
         text-color="blue"
-        to="/"
+        :to="{ name: 'indexPage' }"
         label="Go Home"
         flat
         no-caps

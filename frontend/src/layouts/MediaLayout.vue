@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import MainToolbar from 'components/MainToolbar.vue';
-import TabSwitcherToolbar from 'components/TabSwitcherToolbar.vue';
 </script>
 
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
       <MainToolbar />
-      <TabSwitcherToolbar />
     </q-header>
 
     <q-page-container>
