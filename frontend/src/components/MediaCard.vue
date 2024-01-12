@@ -16,8 +16,9 @@ function showClickAlert() {
   <div class="img_wrapper cursor-pointer" @click="showClickAlert()">
     <q-img :src="imageUrl" class="img_main">
       <template #error>
-        <!-- TODO: Actual error image -->
-        <q-img src="public/favicon.ico" class="img_main" />
+        <div class="img_main row items-center justify-center">
+          <q-icon name="broken_image" size="50px" />
+        </div>
       </template>
     </q-img>
 
