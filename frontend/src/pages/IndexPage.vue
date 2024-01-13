@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import MediaCard from 'components/MediaCard.vue';
 import { api, imageUrl } from 'boot/axios';
+import { MediaType } from 'src/models/types';
 
-const media: { id: number; title: string; year: number; imageUrl: string }[] =
-  [];
+const media: {
+  id: number;
+  mediaType: MediaType;
+  title: string;
+  year: number;
+  imageUrl: string;
+}[] = [];
 
 try {
   // TODO: Get/create list from logged in user
@@ -11,13 +17,9 @@ try {
   const data = response.data;
 
   for (const item of data.results) {
-    const commentIndex = `${item['media_type']}:${item['id']}`;
-    const comments = JSON.parse(data.comments[commentIndex]);
-    console.log(comments);
-
-    // TODO: IDs are not unique between tv and movie, disambiguate with media type
     media.push({
       id: item['id'],
+      mediaType: item['media_type'],
       title: item['name'] || item['title'],
       year: parseInt(
         (item['first_air_date'] || item['release_date']).slice(0, 4)

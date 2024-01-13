@@ -13,9 +13,8 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    // TODO: Have 2 routes /tv and /movie
     //:id(\d+) only matches digits
-    path: '/media/:id(\\d+)',
+    path: '/:mediaType(tv|movie)/:id(\\d+)',
     component: () => import('layouts/MediaLayout.vue'),
     children: [
       {
@@ -25,6 +24,7 @@ const routes: RouteRecordRaw[] = [
         props: (route) => {
           return {
             id: Number(route.params.id),
+            mediaType: route.params.mediaType,
           };
         },
       },

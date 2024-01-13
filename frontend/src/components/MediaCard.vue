@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { MediaType } from 'src/models/types';
+
 interface Props {
   id: number;
+  mediaType: MediaType;
   title: string;
   year: number;
   imageUrl: string;
@@ -12,7 +15,10 @@ const props = defineProps<Props>();
 <template>
   <router-link
     class="img_wrapper"
-    :to="{ name: 'mediaPage', params: { id: props.id } }"
+    :to="{
+      name: 'mediaPage',
+      params: { id: props.id, mediaType: props.mediaType },
+    }"
   >
     <q-img :src="imageUrl" class="img_main">
       <template #error>
