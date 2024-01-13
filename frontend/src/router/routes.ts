@@ -3,12 +3,18 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    name: 'indexPage',
+    redirect: { name: 'mainPage', params: { watchState: 'watching' } },
+  },
+  {
+    path: '/:watchState(watching|planning|watched)',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        name: 'indexPage',
-        component: () => import('pages/IndexPage.vue'),
+        name: 'mainPage',
+        component: () => import('pages/MainPage.vue'),
+        props: true,
       },
     ],
   },

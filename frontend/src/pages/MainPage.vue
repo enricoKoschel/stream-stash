@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import MediaCard from 'components/MediaCard.vue';
 import { api, imageUrl } from 'boot/axios';
-import { MediaType } from 'src/models/types';
+import { MediaType, WatchState } from 'src/models/types';
+import { computed } from 'vue';
+
+interface Props {
+  watchState: WatchState;
+}
+
+const props = defineProps<Props>();
 
 const media: {
   id: number;
@@ -9,6 +16,7 @@ const media: {
   title: string;
   year: number;
   imageUrl: string;
+  watchState: WatchState;
 }[] = [];
 
 try {
@@ -17,6 +25,10 @@ try {
   const data = response.data;
 
   for (const item of data.results) {
+    const comments = JSON.parse(
+      data['comments'][`${item['media_type']}:${item['id']}`] || '{}'
+    );
+
     media.push({
       id: item['id'],
       mediaType: item['media_type'],
@@ -25,16 +37,23 @@ try {
         (item['first_air_date'] || item['release_date']).slice(0, 4)
       ),
       imageUrl: `${imageUrl}/${item['poster_path']}`,
+      watchState: comments['watch_state'],
     });
   }
 } catch (e) {
   console.error(e);
 }
+
+const filteredMedia = computed(() => {
+  return media.filter((elem) => {
+    return elem.watchState === props.watchState;
+  });
+});
 </script>
 
 <template>
   <q-page class="row items-baseline">
-    <media-card v-for="item in media" :key="item.title" v-bind="item" />
+    <media-card v-for="item in filteredMedia" :key="item.title" v-bind="item" />
   </q-page>
 </template>
 
