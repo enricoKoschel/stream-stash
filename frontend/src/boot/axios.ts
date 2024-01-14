@@ -21,7 +21,8 @@ const api = axios.create({
   },
 });
 
-const imageUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2';
+const posterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2';
+const backdropUrl = 'https://image.tmdb.org/t/p/w1920_and_h800_bestv2';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -35,4 +36,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api, imageUrl };
+export { api, posterUrl, backdropUrl };

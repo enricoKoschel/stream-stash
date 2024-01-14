@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { MediaType } from 'src/models/types';
+import ImageWithFallback from 'components/ImageWithFallback.vue';
 
 interface Props {
   id: number;
   mediaType: MediaType;
   title: string;
   year: number;
-  imageUrl: string;
+  posterUrl: string;
 }
 
 const props = defineProps<Props>();
@@ -20,13 +21,7 @@ const props = defineProps<Props>();
       params: { id: props.id, mediaType: props.mediaType },
     }"
   >
-    <q-img :src="imageUrl" class="img_main">
-      <template #error>
-        <div class="img_main row items-center justify-center">
-          <q-icon name="broken_image" size="50px" />
-        </div>
-      </template>
-    </q-img>
+    <ImageWithFallback :src="posterUrl" class="img_main" />
 
     <div class="img_text flex items-center justify-center" style="">
       <p style="text-align: center">

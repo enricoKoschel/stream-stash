@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MediaCard from 'components/MediaCard.vue';
-import { api, imageUrl } from 'boot/axios';
+import { api, posterUrl } from 'boot/axios';
 import { MediaType, WatchState } from 'src/models/types';
 import { computed } from 'vue';
 
@@ -15,7 +15,7 @@ const media: {
   mediaType: MediaType;
   title: string;
   year: number;
-  imageUrl: string;
+  posterUrl: string;
   watchState: WatchState;
 }[] = [];
 
@@ -36,7 +36,7 @@ try {
       year: parseInt(
         (item['first_air_date'] || item['release_date']).slice(0, 4)
       ),
-      imageUrl: `${imageUrl}/${item['poster_path']}`,
+      posterUrl: `${posterUrl}/${item['poster_path']}`,
       watchState: comments['watch_state'],
     });
   }
