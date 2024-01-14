@@ -33,6 +33,7 @@ try {
   <q-page class="row items-baseline">
     <ImageWithFallback
       :src="fullBackdropUrl"
+      fallback-icon-size="300px"
       style="position: absolute; z-index: -1; opacity: 10%"
     />
 

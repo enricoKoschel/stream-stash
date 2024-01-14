@@ -21,7 +21,11 @@ const props = defineProps<Props>();
       params: { id: props.id, mediaType: props.mediaType },
     }"
   >
-    <ImageWithFallback :src="posterUrl" class="img_main" />
+    <ImageWithFallback
+      :src="posterUrl"
+      fallback-icon-size="50px"
+      class="img_main"
+    />
 
     <div class="img_text flex items-center justify-center" style="">
       <p style="text-align: center">

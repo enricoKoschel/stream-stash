@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface Props {
   src: string;
+  fallbackIconSize: string;
 }
 
 const props = defineProps<Props>();
@@ -13,7 +14,10 @@ const props = defineProps<Props>();
         class="row items-center justify-center"
         style="width: 100%; height: 100%"
       >
-        <q-icon name="broken_image" size="50px" />
+        <q-icon
+          name="broken_image"
+          :style="{ 'font-size': fallbackIconSize }"
+        />
       </div>
     </template>
   </q-img>
