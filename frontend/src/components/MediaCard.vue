@@ -39,8 +39,8 @@ const props = defineProps<Props>();
 <style scoped lang="scss">
 @import 'src/css/quasar.variables';
 
-$width: 8rem;
-$height: 12rem;
+$width: 12rem;
+$height: 18rem;
 $border-radius: 5px;
 $transition-duration: 0.2s;
 $background-color: rgba($dark, 0.75);
