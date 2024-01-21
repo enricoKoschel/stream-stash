@@ -11,7 +11,7 @@ const props = defineProps<Props>();
   <q-img :src="props.src">
     <template #error>
       <div
-        class="row items-center justify-center"
+        class="row justify-center content-center"
         style="width: 100%; height: 100%"
       >
         <q-icon
