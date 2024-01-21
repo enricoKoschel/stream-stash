@@ -9,8 +9,8 @@ import ImageWithFallback from 'components/ImageWithFallback.vue';
 
       <div class="row justify-center items-center">
         <ImageWithFallback
-          src="public/logos/TMDB.svg"
-          fallback-icon-size="20px"
+          src="src/assets/logos/TMDB.svg"
+          fallback-icon-size="10px"
           style="width: 3rem; margin-right: 1rem"
         />
 
