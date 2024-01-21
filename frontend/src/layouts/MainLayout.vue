@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import MainToolbar from 'components/MainToolbar.vue';
 import WatchStateToolbar from 'components/WatchStateToolbar.vue';
+import MainFooter from 'components/MainFooter.vue';
 </script>
 
 <template>
@@ -13,6 +14,10 @@ import WatchStateToolbar from 'components/WatchStateToolbar.vue';
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer>
+      <MainFooter />
+    </q-footer>
   </q-layout>
 </template>
 
