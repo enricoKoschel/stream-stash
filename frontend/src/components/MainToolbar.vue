@@ -2,32 +2,44 @@
 import { ref } from 'vue';
 
 const searchText = ref('');
+const loggedIn = ref(false);
 </script>
 
 <template>
   <q-toolbar class="bg-dark">
-    <!-- TODO: Replace with logo -->
-    <q-btn flat dense round icon="home" :to="{ name: 'indexPage' }" />
+    <div class="row items-center" style="width: 100vw">
+      <!-- TODO: Replace with logo -->
+      <q-btn flat dense round icon="home" :to="{ name: 'indexPage' }" />
 
-    <q-toolbar-title>Stream Stash</q-toolbar-title>
+      <q-toolbar-title shrink>Stream Stash</q-toolbar-title>
+    </div>
 
-    <!-- TODO: Center in toolbar -->
-    <q-input
-      v-model="searchText"
-      label="Search"
-      clearable
-      dense
-      style="width: 30rem"
-    >
-      <template #prepend>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+    <div>
+      <q-input
+        v-model="searchText"
+        label="Search"
+        clearable
+        dense
+        style="width: 30rem"
+      >
+        <template #prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+    </div>
 
-    <q-space />
+    <div class="row justify-end" style="width: 100vw">
+      <div v-if="loggedIn" class="row">
+        <q-btn label="Profile" flat no-caps />
 
-    <!-- TODO: Dropdown with login, profile, about(TMDB credit) etc. -->
-    <q-btn flat dense round icon="menu" />
+        <q-separator vertical />
+
+        <q-btn label="Logout" flat no-caps @click="loggedIn = false" />
+      </div>
+      <div v-else class="row">
+        <q-btn label="Login" flat no-caps @click="loggedIn = true" />
+      </div>
+    </div>
   </q-toolbar>
 </template>
 
