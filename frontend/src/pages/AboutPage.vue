@@ -15,9 +15,10 @@ import ImageWithFallback from 'components/ImageWithFallback.vue';
         />
 
         <div>
-          This product uses the <a href="https://themoviedb.org">TMDB</a> API
-          but is not endorsed or certified by
-          <a href="https://themoviedb.org">TMDB</a>.
+          This product uses the
+          <a href="https://themoviedb.org" target="_blank">TMDB</a> API but is
+          not endorsed or certified by
+          <a href="https://themoviedb.org" target="_blank">TMDB</a>.
         </div>
       </div>
 
