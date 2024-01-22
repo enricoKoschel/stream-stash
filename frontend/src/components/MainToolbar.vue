@@ -30,7 +30,7 @@ const loggedIn = ref(false);
 
     <div class="row justify-end" style="width: 100vw">
       <div v-if="loggedIn" class="row">
-        <q-btn label="Profile" flat no-caps />
+        <q-btn label="Profile" flat no-caps :to="{ name: 'profilePage' }" />
 
         <q-separator vertical />
 
