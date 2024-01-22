@@ -39,8 +39,17 @@ try {
   console.error(e);
 }
 
-function likeColor(btn: 'like' | 'dislike') {
-  return comments.value['like_state'] === btn ? 'blue' : 'white';
+function ratingColor(star: number) {
+  return Number(comments.value['rating']) >= star ? 'blue' : 'white';
+}
+
+function ratingClicked(star: number) {
+  const starStr = String(star);
+  if (comments.value['rating'] === starStr) {
+    comments.value['rating'] = '';
+  } else {
+    comments.value['rating'] = starStr;
+  }
 }
 </script>
 
@@ -56,23 +65,18 @@ function likeColor(btn: 'like' | 'dislike') {
       <ImageWithFallback
         :src="fullPosterUrl"
         fallback-icon-size="50px"
-        style="border-radius: 5px"
+        style="border-radius: 5px; width: 12rem"
       />
 
       <div class="row justify-center" style="margin-top: 1rem">
         <q-btn
-          icon="thumb_up"
-          :color="likeColor('like')"
+          v-for="i in 3"
+          :key="i"
+          icon="star"
+          :color="ratingColor(i)"
           flat
-          style="width: 4rem"
-          @click="comments['like_state'] = 'like'"
-        />
-        <q-btn
-          icon="thumb_down"
-          :color="likeColor('dislike')"
-          flat
-          style="width: 4rem"
-          @click="comments['like_state'] = 'dislike'"
+          style="max-width: calc(12rem / 3); flex-grow: 1"
+          @click="ratingClicked(i)"
         />
       </div>
     </div>
