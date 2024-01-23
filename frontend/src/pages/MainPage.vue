@@ -41,6 +41,7 @@ try {
     });
   }
 } catch (e) {
+  // TODO: Actual error handling
   console.error(e);
 }
 

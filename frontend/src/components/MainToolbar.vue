@@ -37,7 +37,7 @@ const loggedIn = ref(false);
         <q-btn label="Logout" flat no-caps @click="loggedIn = false" />
       </div>
       <div v-else class="row">
-        <q-btn label="Login" flat no-caps @click="loggedIn = true" />
+        <q-btn label="Login" flat no-caps :to="{ name: 'loginPage' }" />
       </div>
     </div>
   </q-toolbar>

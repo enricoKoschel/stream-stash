@@ -21,6 +21,10 @@ const api = axios.create({
   },
 });
 
+function setAuthorization(authorization: string) {
+  axios.defaults.headers.common['Authorization'] = authorization;
+}
+
 const posterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2';
 const backdropUrl = 'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2';
 
@@ -36,4 +40,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api, posterUrl, backdropUrl };
+export { api, posterUrl, backdropUrl, setAuthorization };

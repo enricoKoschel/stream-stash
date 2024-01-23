@@ -36,6 +36,7 @@ try {
     (details['first_air_date'] || details['release_date']).slice(0, 4)
   );
 } catch (e) {
+  // TODO: Actual error handling
   console.error(e);
 }
 
