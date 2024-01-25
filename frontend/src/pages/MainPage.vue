@@ -21,6 +21,7 @@ const media: {
 
 try {
   // TODO: Get/create list from logged in user
+  // TODO: Check if success
   const response = await api.get('/4/list/8286408');
   const data = response.data;
 

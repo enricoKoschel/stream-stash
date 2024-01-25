@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useAuthStore } from 'stores/authStore';
 
 const searchText = ref('');
-const loggedIn = ref(false);
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -29,15 +31,16 @@ const loggedIn = ref(false);
     </div>
 
     <div class="row justify-end" style="width: 100vw">
-      <div v-if="loggedIn" class="row">
+      <div v-if="authStore.loggedIn" class="row">
+        <!-- TODO: Show username -->
         <q-btn label="Profile" flat no-caps :to="{ name: 'profilePage' }" />
 
         <q-separator vertical />
 
-        <q-btn label="Logout" flat no-caps @click="loggedIn = false" />
+        <q-btn label="Logout" flat no-caps @click="authStore.logout()" />
       </div>
       <div v-else class="row">
-        <q-btn label="Login" flat no-caps :to="{ name: 'loginPage' }" />
+        <q-btn label="Login" flat no-caps @click="authStore.login()" />
       </div>
     </div>
   </q-toolbar>
