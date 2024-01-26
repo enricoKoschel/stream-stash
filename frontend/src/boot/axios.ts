@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
+import { useAuthStore } from 'stores/authStore';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -17,9 +18,24 @@ declare module '@vue/runtime-core' {
 const api = axios.create({
   baseURL: 'https://api.themoviedb.org',
   headers: {
-    Authorization: process.env.TMDB_API_KEY,
     Accept: 'application/json',
   },
+});
+
+api.interceptors.request.use(function (config) {
+  config.headers.Authorization = `Bearer ${process.env.TMDB_ACCESS_TOKEN}`;
+
+  try {
+    const authStore = useAuthStore();
+
+    if (authStore.loggedIn) {
+      config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+    }
+  } catch (e) {
+    /* empty */
+  }
+
+  return config;
 });
 
 const posterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2';
