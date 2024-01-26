@@ -5,7 +5,11 @@ import { LocalStorage } from 'quasar';
 const authStore = useAuthStore();
 
 const initialSessionId = LocalStorage.getItem<string>('sessionId');
-if (initialSessionId) {
+if (
+  initialSessionId &&
+  initialSessionId !== 'undefined' &&
+  initialSessionId !== 'null'
+) {
   authStore.sessionId = initialSessionId;
 }
 
