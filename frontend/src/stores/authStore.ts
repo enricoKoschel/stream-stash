@@ -1,42 +1,41 @@
 import { defineStore } from 'pinia';
 import {
-  wwwAuthenticateToken,
-  v3CreateSession,
-  v3deleteSession,
-  v3NewToken,
+  v4DeleteAccessToken,
+  v4NewAccessToken,
+  v4NewRequestToken,
+  wwwAuthenticateV4RequestToken,
 } from 'src/models/tmdbApi';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    sessionId: '',
+    accessToken: '',
   }),
   getters: {
     loggedIn(state): boolean {
-      return state.sessionId.length !== 0;
+      return state.accessToken.length !== 0;
     },
   },
   actions: {
     async logout(): Promise<void> {
       if (!this.loggedIn) return;
 
-      // sessionId should be cleared, regardless of if the deletion succeeded
-      await v3deleteSession(this.sessionId);
+      await v4DeleteAccessToken(this.accessToken);
 
-      this.sessionId = '';
+      this.accessToken = '';
     },
     async login(): Promise<void> {
-      const newTokenResult = await v3NewToken();
-      if (!newTokenResult.success) return;
+      const newRequestTokenResult = await v4NewRequestToken();
+      if (!newRequestTokenResult.success) return;
 
-      const requestToken = newTokenResult.value.request_token;
+      const requestToken = newRequestTokenResult.value.request_token;
 
-      const windowOpened = await wwwAuthenticateToken(requestToken);
+      const windowOpened = await wwwAuthenticateV4RequestToken(requestToken);
       if (!windowOpened) return;
 
-      const createSessionResult = await v3CreateSession(requestToken);
-      if (!createSessionResult.success) return;
+      const newAccessTokenResult = await v4NewAccessToken(requestToken);
+      if (!newAccessTokenResult.success) return;
 
-      this.sessionId = createSessionResult.value.session_id;
+      this.accessToken = newAccessTokenResult.value.access_token;
     },
   },
 });

@@ -10,42 +10,18 @@ import {
 
 type ApiResult<T> = Result<T, BaseError>;
 
-interface v3CreateSessionRes {
-  session_id: string;
-}
-
-export async function v3CreateSession(
-  requestToken: string
-): Promise<ApiResult<v3CreateSessionRes>> {
-  try {
-    const response = await api.post<v3CreateSessionRes>(
-      '/3/authentication/session/new',
-      {
-        request_token: requestToken,
-      }
-    );
-
-    return resultOk(response.data);
-  } catch (e) {
-    const error = ensureError(e);
-
-    createErrorDialog(
-      'A secure connection to TMDB could not be established. Please make sure to allow Stream Stash access to your account.'
-    );
-
-    return resultErr(error);
-  }
-}
-
-interface v3NewTokenRes {
-  expires_at: string;
+interface v4NewRequestTokenRes {
   request_token: string;
+  status_code: number;
+  status_message: string;
 }
 
-export async function v3NewToken(): Promise<ApiResult<v3NewTokenRes>> {
+export async function v4NewRequestToken(): Promise<
+  ApiResult<v4NewRequestTokenRes>
+> {
   try {
-    const response = await api.get<v3NewTokenRes>(
-      '/3/authentication/token/new'
+    const response = await api.post<v4NewRequestTokenRes>(
+      '/4/auth/request_token'
     );
 
     return resultOk(response.data);
@@ -53,16 +29,16 @@ export async function v3NewToken(): Promise<ApiResult<v3NewTokenRes>> {
     const error = ensureError(e);
 
     // TODO: Better error message
-    createErrorDialog('v3NewToken - ' + error.toString());
+    createErrorDialog('v4NewRequestToken - ' + error.toString());
 
     return resultErr(error);
   }
 }
 
-export async function wwwAuthenticateToken(
+export async function wwwAuthenticateV4RequestToken(
   requestToken: string
 ): Promise<boolean> {
-  const url = `https://www.themoviedb.org/authenticate/${requestToken}`;
+  const url = `https://www.themoviedb.org/auth/access?request_token=${requestToken}`;
   const authWindow = window.open(url, '_blank');
 
   if (!authWindow) {
@@ -83,20 +59,48 @@ export async function wwwAuthenticateToken(
   return true;
 }
 
-// Empty response
-type v3deleteSessionRes = Record<string, never>;
+interface v4NewAccessTokenRes {
+  access_token: string;
+  account_id: string;
+  status_code: number;
+  status_message: string;
+}
 
-export async function v3deleteSession(
-  sessionId: string
-): Promise<ApiResult<v3deleteSessionRes>> {
+export async function v4NewAccessToken(
+  requestToken: string
+): Promise<ApiResult<v4NewAccessTokenRes>> {
   try {
-    const response = await api.delete<v3deleteSessionRes>(
-      '/3/authentication/session',
-      {
-        data: {
-          session_id: sessionId,
-        },
-      }
+    const response = await api.post<v4NewAccessTokenRes>(
+      '/4/auth/access_token',
+      { request_token: requestToken }
+    );
+
+    return resultOk(response.data);
+  } catch (e) {
+    const error = ensureError(e);
+
+    createErrorDialog(
+      'A secure connection to TMDB could not be established. Please make sure to allow Stream Stash access to your account.'
+    );
+
+    return resultErr(error);
+  }
+}
+
+interface v4DeleteAccessTokenRes {
+  access_token: string;
+  account_id: string;
+  status_code: number;
+  status_message: string;
+}
+
+export async function v4DeleteAccessToken(
+  accessToken: string
+): Promise<ApiResult<v4DeleteAccessTokenRes>> {
+  try {
+    const response = await api.delete<v4DeleteAccessTokenRes>(
+      '/4/auth/access_token',
+      { data: { access_token: accessToken } }
     );
 
     return resultOk(response.data);
@@ -104,7 +108,7 @@ export async function v3deleteSession(
     const error = ensureError(e);
 
     // TODO: Better error message
-    createErrorDialog('v3deleteSession - ' + error.toString());
+    createErrorDialog('v4DeleteAccessToken - ' + error.toString());
 
     return resultErr(error);
   }

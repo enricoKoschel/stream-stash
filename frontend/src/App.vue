@@ -4,17 +4,17 @@ import { LocalStorage } from 'quasar';
 
 const authStore = useAuthStore();
 
-const initialSessionId = LocalStorage.getItem<string>('sessionId');
+const initialAccessToken = LocalStorage.getItem<string>('accessToken');
 if (
-  initialSessionId &&
-  initialSessionId !== 'undefined' &&
-  initialSessionId !== 'null'
+  initialAccessToken &&
+  initialAccessToken !== 'undefined' &&
+  initialAccessToken !== 'null'
 ) {
-  authStore.sessionId = initialSessionId;
+  authStore.accessToken = initialAccessToken;
 }
 
 authStore.$subscribe((mutation, state) => {
-  LocalStorage.set('sessionId', state.sessionId);
+  LocalStorage.set('accessToken', state.accessToken);
 });
 </script>
 
