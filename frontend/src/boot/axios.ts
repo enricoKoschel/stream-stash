@@ -18,6 +18,7 @@ const api = axios.create({
   baseURL: 'https://api.themoviedb.org',
   headers: {
     Authorization: process.env.TMDB_API_KEY,
+    Accept: 'application/json',
   },
 });
 
