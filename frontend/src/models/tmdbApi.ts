@@ -29,8 +29,9 @@ export async function v3CreateSession(
   } catch (e) {
     const error = ensureError(e);
 
-    // TODO: Better error message
-    createErrorDialog('v3CreateSession - ' + error.toString());
+    createErrorDialog(
+      'A secure connection to TMDB could not be established. Please make sure to allow Stream Stash access to your account.'
+    );
 
     return resultErr(error);
   }
@@ -66,7 +67,7 @@ export async function wwwAuthenticateToken(
 
   if (!authWindow) {
     createErrorDialog(
-      'The login page could not be opened, please make sure you allow popups from this page'
+      'The login page could not be opened. Please make sure you allow popups from Stream Stash.'
     );
 
     return false;
