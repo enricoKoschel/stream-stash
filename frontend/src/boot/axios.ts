@@ -23,7 +23,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(function (config) {
-  config.headers.Authorization = `Bearer ${process.env.TMDB_ACCESS_TOKEN}`;
+  config.headers.Authorization = `Bearer ${
+    process.env.TMDB_ACCESS_TOKEN ?? ''
+  }`;
 
   try {
     const authStore = useAuthStore();

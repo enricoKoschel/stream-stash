@@ -5,11 +5,32 @@ import {
   v4NewRequestToken,
   wwwAuthenticateV4RequestToken,
 } from 'src/models/tmdbApi';
+import { LocalStorage } from 'quasar';
+
+interface State {
+  accessToken: string;
+}
+
+function init(): State {
+  const state: State = {
+    accessToken: '',
+  };
+
+  const initialAccessToken = LocalStorage.getItem<string>('accessToken');
+
+  if (
+    initialAccessToken &&
+    initialAccessToken !== 'undefined' &&
+    initialAccessToken !== 'null'
+  ) {
+    state.accessToken = initialAccessToken;
+  }
+
+  return state;
+}
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    accessToken: '',
-  }),
+  state: () => init(),
   getters: {
     loggedIn(state): boolean {
       return state.accessToken.length !== 0;

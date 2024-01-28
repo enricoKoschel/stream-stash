@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { MediaType } from 'src/models/types';
-import { api, posterUrl, backdropUrl } from 'boot/axios';
 import ImageWithFallback from 'components/ImageWithFallback.vue';
-import { Ref, ref } from 'vue';
+import { constructMediaKey } from 'src/models/methods';
+import { useMediaStore } from 'stores/mediaStore';
 
 interface Props {
   id: number;
@@ -11,46 +11,23 @@ interface Props {
 
 const props = defineProps<Props>();
 
-let details,
-  comments: Ref<{ [x: string]: string }>,
-  fullPosterUrl,
-  fullBackdropUrl,
-  releaseYear;
-try {
-  // TODO: Get/create list from logged in user
-  // TODO: Check if success
-  const response = await api.get('/4/list/8286408');
-  const data = response.data;
+const mediaStore = await useMediaStore();
 
-  details = data['results'].find(
-    (elem: { [x: string]: string }) =>
-      Number(elem['id']) === props.id && elem['media_type'] === props.mediaType
-  );
-  comments = ref(
-    JSON.parse(data['comments'][`${props.mediaType}:${props.id}`] || '{}')
-  );
+// Media definitely exists because of the route guard in routes.ts
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const media = mediaStore.getMediaByKey(
+  constructMediaKey(props.mediaType, props.id)
+)!;
 
-  fullPosterUrl = `${posterUrl}/${details['poster_path']}`;
-  fullBackdropUrl = `${backdropUrl}/${details['backdrop_path']}`;
-
-  releaseYear = Number(
-    (details['first_air_date'] || details['release_date']).slice(0, 4)
-  );
-} catch (e) {
-  // TODO: Actual error handling
-  console.error(e);
+function ratingColor(star: number): string {
+  return media.rating >= star ? 'blue' : 'white';
 }
 
-function ratingColor(star: number) {
-  return Number(comments.value['rating']) >= star ? 'blue' : 'white';
-}
-
-function ratingClicked(star: number) {
-  const starStr = String(star);
-  if (comments.value['rating'] === starStr) {
-    comments.value['rating'] = '';
+function ratingClicked(star: number): void {
+  if (media.rating === star) {
+    media.rating = 0;
   } else {
-    comments.value['rating'] = starStr;
+    media.rating = star;
   }
 }
 </script>
@@ -58,14 +35,14 @@ function ratingClicked(star: number) {
 <template>
   <q-page class="row">
     <ImageWithFallback
-      :src="fullBackdropUrl"
+      :src="media.backdropUrl"
       fallback-icon-size="300px"
       style="position: absolute; z-index: -1; opacity: 10%; height: 100%"
     />
 
     <div class="offset-2" style="width: 12rem; height: 18rem; margin-top: 5vh">
       <ImageWithFallback
-        :src="fullPosterUrl"
+        :src="media.posterUrl"
         fallback-icon-size="50px"
         style="border-radius: 5px; width: 12rem"
       />
@@ -85,17 +62,13 @@ function ratingClicked(star: number) {
 
     <div style="width: 65%; margin-top: 10vh; margin-left: 2vw">
       <p class="text-h6">
-        {{ details['name'] }}
+        {{ media.title }}
         <span style="opacity: 50%; font-size: 80%; margin-left: 0.3rem">
-          {{ releaseYear }}
+          {{ media.date.slice(0, 4) }}
         </span>
       </p>
-      <p>{{ details['overview'] }}</p>
+      <p>{{ media.overview }}</p>
     </div>
-
-    <!--    <p>Details: {{ details }}</p>
-    <br />
-    <p>Comments: {{ comments }}</p>-->
   </q-page>
 </template>
 

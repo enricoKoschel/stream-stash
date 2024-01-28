@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { MediaType } from 'src/models/types';
 import ImageWithFallback from 'components/ImageWithFallback.vue';
+import { Media } from 'src/models/types';
 
 interface Props {
-  id: number;
-  mediaType: MediaType;
-  title: string;
-  year: number;
-  posterUrl: string;
+  media: Media;
 }
 
 const props = defineProps<Props>();
@@ -18,19 +14,19 @@ const props = defineProps<Props>();
     class="img_wrapper"
     :to="{
       name: 'mediaPage',
-      params: { id: props.id, mediaType: props.mediaType },
+      params: { id: props.media.id, mediaType: props.media.mediaType },
     }"
   >
     <ImageWithFallback
-      :src="posterUrl"
+      :src="props.media.posterUrl"
       fallback-icon-size="50px"
       class="img_main"
     />
 
     <div class="img_text flex items-center justify-center" style="">
       <p style="text-align: center">
-        {{ title }} <br />
-        ({{ year }})
+        {{ props.media.title }} <br />
+        ({{ props.media.date.slice(0, 4) }})
       </p>
     </div>
   </router-link>

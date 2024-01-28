@@ -4,15 +4,6 @@ import { LocalStorage } from 'quasar';
 
 const authStore = useAuthStore();
 
-const initialAccessToken = LocalStorage.getItem<string>('accessToken');
-if (
-  initialAccessToken &&
-  initialAccessToken !== 'undefined' &&
-  initialAccessToken !== 'null'
-) {
-  authStore.accessToken = initialAccessToken;
-}
-
 authStore.$subscribe((mutation, state) => {
   LocalStorage.set('accessToken', state.accessToken);
 });

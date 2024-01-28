@@ -33,3 +33,19 @@ export class BaseError extends Error {
 export type Result<T, E extends BaseError> =
   | { success: true; value: T }
   | { success: false; error: E };
+
+export interface MediaComment {
+  watchState: WatchState;
+  rating: number;
+}
+
+export interface Media extends MediaComment {
+  id: number;
+  mediaType: MediaType;
+  key: string;
+  title: string;
+  overview: string;
+  date: string;
+  posterUrl: string;
+  backdropUrl: string;
+}

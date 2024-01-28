@@ -7,13 +7,23 @@ import {
   resultOk,
   sleep,
 } from 'src/models/methods';
+import { AxiosResponse } from 'axios';
 
 type ApiResult<T> = Result<T, BaseError>;
 
-interface v4NewRequestTokenRes {
-  request_token: string;
-  status_code: number;
+function genericApiError<T>(e: unknown, functionName: string): ApiResult<T> {
+  const error = ensureError(e);
+
+  createErrorDialog(`${functionName} - ` + error.toString());
+
+  return resultErr(error);
+}
+
+export interface v4NewRequestTokenRes {
   status_message: string;
+  request_token: string;
+  success: boolean;
+  status_code: number;
 }
 
 export async function v4NewRequestToken(): Promise<
@@ -26,12 +36,7 @@ export async function v4NewRequestToken(): Promise<
 
     return resultOk(response.data);
   } catch (e) {
-    const error = ensureError(e);
-
-    // TODO: Better error message
-    createErrorDialog('v4NewRequestToken - ' + error.toString());
-
-    return resultErr(error);
+    return genericApiError(e, 'v4NewRequestToken');
   }
 }
 
@@ -59,11 +64,12 @@ export async function wwwAuthenticateV4RequestToken(
   return true;
 }
 
-interface v4NewAccessTokenRes {
-  access_token: string;
+export interface v4NewAccessTokenRes {
   account_id: string;
-  status_code: number;
+  access_token: string;
+  success: boolean;
   status_message: string;
+  status_code: number;
 }
 
 export async function v4NewAccessToken(
@@ -87,11 +93,10 @@ export async function v4NewAccessToken(
   }
 }
 
-interface v4DeleteAccessTokenRes {
-  access_token: string;
-  account_id: string;
-  status_code: number;
+export interface v4DeleteAccessTokenRes {
   status_message: string;
+  success: boolean;
+  status_code: number;
 }
 
 export async function v4DeleteAccessToken(
@@ -105,11 +110,78 @@ export async function v4DeleteAccessToken(
 
     return resultOk(response.data);
   } catch (e) {
-    const error = ensureError(e);
+    return genericApiError(e, 'v4DeleteAccessToken');
+  }
+}
 
-    // TODO: Better error message
-    createErrorDialog('v4DeleteAccessToken - ' + error.toString());
+export interface v4GetListDetailsRes {
+  average_rating: number;
+  backdrop_path: string;
+  results: (
+    | {
+        adult: boolean;
+        backdrop_path: string;
+        id: number;
+        original_language: string;
+        overview: string;
+        poster_path: string;
+        genre_ids: number[];
+        popularity: number;
+        vote_average: number;
+        vote_count: number;
+      } & (
+        | {
+            media_type: 'movie';
+            title: string;
+            original_title: string;
+            release_date: string;
+            video: boolean;
+          }
+        | {
+            media_type: 'tv';
+            first_air_date: string;
+            name: string;
+            origin_country: string[];
+            original_name: string;
+          }
+      )
+  )[];
+  comments: Partial<Record<string, string | null>>;
+  created_by: {
+    avatar_path: string;
+    gravatar_hash: string;
+    id: string;
+    name: string;
+    username: string;
+  };
+  description: string;
+  id: number;
+  iso_3166_1: string;
+  iso_639_1: string;
+  item_count: number;
+  name: string;
+  object_ids: Record<string, never>;
+  page: number;
+  poster_path: string;
+  public: boolean;
+  revenue: number;
+  runtime: number;
+  sort_by: string;
+  total_pages: number;
+  total_results: number;
+}
 
-    return resultErr(error);
+export async function v4GetListDetails(
+  listId: number
+): Promise<ApiResult<v4GetListDetailsRes>> {
+  try {
+    //TODO: multiple pages
+    const response: AxiosResponse<v4GetListDetailsRes> = await api.get(
+      `/4/list/${listId}`
+    );
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v4GetListDetails');
   }
 }
