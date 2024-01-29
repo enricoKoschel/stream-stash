@@ -36,12 +36,12 @@ function ratingClicked(star: number): void {
 
       <div class="row justify-center" style="margin-top: 1rem">
         <q-btn
-          v-for="i in 3"
+          v-for="i in 5"
           :key="i"
           icon="star"
           :color="ratingColor(i)"
           flat
-          style="max-width: calc(12rem / 3); flex-grow: 1"
+          style="max-width: calc(12rem / 5); flex-grow: 1"
           @click="ratingClicked(i)"
         />
       </div>
