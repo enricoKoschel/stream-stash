@@ -1,7 +1,4 @@
 import { RouteRecordRaw } from 'vue-router';
-import { constructMediaKey } from 'src/models/methods';
-import { MediaType } from 'src/models/types';
-import { useMediaStore } from 'stores/mediaStore';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -25,25 +22,11 @@ const routes: RouteRecordRaw[] = [
     //:id(\d+) only matches digits
     path: '/:mediaType(tv|movie)/:id(\\d+)',
     component: () => import('layouts/MediaLayout.vue'),
-    beforeEnter: async (to, from, next) => {
-      const mediaStore = await useMediaStore();
-
-      const key = constructMediaKey(
-        to.params.mediaType as MediaType,
-        Number(to.params.id)
-      );
-
-      if (mediaStore.mediaKeyExists(key)) {
-        next();
-      } else {
-        next({ name: 'errorNotFound' });
-      }
-    },
     children: [
       {
         path: '',
         name: 'mediaPage',
-        component: () => import('pages/MediaPage.vue'),
+        component: () => import('pages/MaybeMediaPage.vue'),
         props: (route) => {
           return {
             id: Number(route.params.id),
@@ -64,9 +47,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/ProfilePage.vue'),
   },
   {
-    path: '/:catchAll(.*)*',
+    path: '/notFound',
     name: 'errorNotFound',
     component: () => import('pages/ErrorNotFound.vue'),
+    alias: '/:catchAll(.*)*',
   },
 ];
 

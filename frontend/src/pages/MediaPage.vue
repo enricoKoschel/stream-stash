@@ -1,33 +1,20 @@
 <script setup lang="ts">
-import { MediaType } from 'src/models/types';
 import ImageWithFallback from 'components/ImageWithFallback.vue';
-import { constructMediaKey } from 'src/models/methods';
-import { useMediaStore } from 'stores/mediaStore';
+import { Media } from 'src/models/types';
 
-interface Props {
-  id: number;
-  mediaType: MediaType;
-}
-
-const props = defineProps<Props>();
-
-const mediaStore = await useMediaStore();
-
-// Media definitely exists because of the route guard in routes.ts
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const media = mediaStore.getMediaByKey(
-  constructMediaKey(props.mediaType, props.id)
-)!;
+// Typescript can not resolve defineModel() for some reason
+// eslint-disable-next-line no-undef
+const model = defineModel<Media>('media', { required: true });
 
 function ratingColor(star: number): string {
-  return media.rating >= star ? 'blue' : 'white';
+  return model.value.rating >= star ? 'blue' : 'white';
 }
 
 function ratingClicked(star: number): void {
-  if (media.rating === star) {
-    media.rating = 0;
+  if (model.value.rating === star) {
+    model.value.rating = 0;
   } else {
-    media.rating = star;
+    model.value.rating = star;
   }
 }
 </script>
@@ -35,14 +22,14 @@ function ratingClicked(star: number): void {
 <template>
   <q-page class="row">
     <ImageWithFallback
-      :src="media.backdropUrl"
+      :src="model.backdropUrl"
       fallback-icon-size="300px"
       style="position: absolute; z-index: -1; opacity: 10%; height: 100%"
     />
 
     <div class="offset-2" style="width: 12rem; height: 18rem; margin-top: 5vh">
       <ImageWithFallback
-        :src="media.posterUrl"
+        :src="model.posterUrl"
         fallback-icon-size="50px"
         style="border-radius: 5px; width: 12rem"
       />
@@ -62,12 +49,12 @@ function ratingClicked(star: number): void {
 
     <div style="width: 65%; margin-top: 10vh; margin-left: 2vw">
       <p class="text-h6">
-        {{ media.title }}
+        {{ model.title }}
         <span style="opacity: 50%; font-size: 80%; margin-left: 0.3rem">
-          {{ media.date.slice(0, 4) }}
+          {{ model.date.slice(0, 4) }}
         </span>
       </p>
-      <p>{{ media.overview }}</p>
+      <p>{{ model.overview }}</p>
     </div>
   </q-page>
 </template>

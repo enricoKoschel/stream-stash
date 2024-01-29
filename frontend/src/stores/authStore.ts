@@ -7,36 +7,27 @@ import {
 } from 'src/models/tmdbApi';
 import { LocalStorage } from 'quasar';
 
-interface State {
-  accessToken: string;
-}
-
-function init(): State {
-  const state: State = {
-    accessToken: '',
-  };
-
-  const initialAccessToken = LocalStorage.getItem<string>('accessToken');
-
-  if (
-    initialAccessToken &&
-    initialAccessToken !== 'undefined' &&
-    initialAccessToken !== 'null'
-  ) {
-    state.accessToken = initialAccessToken;
-  }
-
-  return state;
-}
-
 export const useAuthStore = defineStore('auth', {
-  state: () => init(),
+  state: () => ({
+    accessToken: '',
+  }),
   getters: {
     loggedIn(state): boolean {
       return state.accessToken.length !== 0;
     },
   },
   actions: {
+    init(): void {
+      const accessToken = LocalStorage.getItem<string>('accessToken');
+
+      if (
+        accessToken &&
+        accessToken !== 'undefined' &&
+        accessToken !== 'null'
+      ) {
+        this.accessToken = accessToken;
+      }
+    },
     async logout(): Promise<void> {
       if (!this.loggedIn) return;
 

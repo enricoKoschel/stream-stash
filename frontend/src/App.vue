@@ -1,17 +1,11 @@
 <script setup lang="ts">
-import { useAuthStore } from 'stores/authStore';
-import { LocalStorage } from 'quasar';
-
-const authStore = useAuthStore();
-
-authStore.$subscribe((mutation, state) => {
-  LocalStorage.set('accessToken', state.accessToken);
-});
+import AsyncWrapper from 'components/AsyncWrapper.vue';
 </script>
 
 <template>
   <suspense>
-    <router-view />
+    <!-- This component is needed because async/await cannot be used in App.vue -->
+    <AsyncWrapper />
   </suspense>
 </template>
 

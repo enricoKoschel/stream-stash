@@ -10,7 +10,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const mediaStore = await useMediaStore();
+const mediaStore = useMediaStore();
 
 const filteredMedia = computed(() => {
   return mediaStore.allMedia.filter((elem) => {
