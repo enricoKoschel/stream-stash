@@ -8,6 +8,8 @@ import { useMediaStore } from 'stores/mediaStore';
 const mediaStore = useMediaStore();
 await mediaStore.init();
 
+// TODO: Subscribe to mediaStore, batch edits in an editStore, send those edits to tmdb after x seconds
+
 const authStore = useAuthStore();
 authStore.init();
 

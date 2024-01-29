@@ -90,7 +90,8 @@ export function parseMedia(
     const key = constructMediaKey(item.media_type, item.id);
 
     const commentString = details.comments[key] ?? '';
-    // TODO: commentString is user editable on TMDB, so verify that it actually is a MediaComment
+
+    // TODO: Check for all fields that should be present on a comment and set default values for those that aren't
     const comment = safeJsonParse<MediaComment>(commentString) ?? {
       ...defaultComment,
     };
