@@ -59,13 +59,15 @@ export function constructMediaKey(mediaType: MediaType, id: number): string {
   return `${mediaType}:${id}`;
 }
 
-export function parseMedia(details: v4GetListDetailsRes): Media[] {
+export function parseMedia(
+  details: v4GetListDetailsRes
+): Partial<Record<string, Media>> {
   const defaultComment: MediaComment = {
     watchState: 'planning',
     rating: 0,
   };
 
-  const media: Media[] = [];
+  const media: Partial<Record<string, Media>> = {};
 
   for (const item of details.results) {
     const key = constructMediaKey(item.media_type, item.id);
@@ -76,7 +78,7 @@ export function parseMedia(details: v4GetListDetailsRes): Media[] {
       ...defaultComment,
     };
 
-    media.push({
+    media[key] = {
       id: item.id,
       mediaType: item.media_type,
       key: key,
@@ -87,7 +89,7 @@ export function parseMedia(details: v4GetListDetailsRes): Media[] {
       backdropUrl: `${backdropUrl}/${item.backdrop_path}`,
       watchState: comment.watchState,
       rating: comment.rating,
-    });
+    };
   }
 
   return media;

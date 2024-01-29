@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MediaCard from 'components/MediaCard.vue';
-import { WatchState } from 'src/models/types';
-import { computed } from 'vue';
+import { Media, WatchState } from 'src/models/types';
+import { computed, ComputedRef } from 'vue';
 import { useMediaStore } from 'stores/mediaStore';
 
 interface Props {
@@ -12,10 +12,11 @@ const props = defineProps<Props>();
 
 const mediaStore = useMediaStore();
 
-const filteredMedia = computed(() => {
-  return mediaStore.allMedia.filter((elem) => {
-    return elem.watchState === props.watchState;
-  });
+const filteredMedia: ComputedRef<Media[]> = computed(() => {
+  // as Media[] is safe because of the check for elem in filter()
+  return Object.values(mediaStore.allMedia).filter((elem) => {
+    return elem && elem.watchState === props.watchState;
+  }) as Media[];
 });
 </script>
 

@@ -5,7 +5,7 @@ import { parseMedia } from 'src/models/methods';
 
 export const useMediaStore = defineStore('media', {
   state: () => ({
-    allMedia: [] as Media[],
+    allMedia: {} as Partial<Record<string, Media>>,
   }),
   getters: {},
   actions: {
@@ -16,12 +16,6 @@ export const useMediaStore = defineStore('media', {
       if (result.success) {
         this.allMedia = parseMedia(result.value);
       }
-    },
-    getMediaByKey(key: string): Media | undefined {
-      return this.allMedia.find((elem) => elem.key === key);
-    },
-    mediaKeyExists(key: string): boolean {
-      return this.getMediaByKey(key) !== undefined;
     },
   },
 });

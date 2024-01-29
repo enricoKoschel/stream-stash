@@ -16,9 +16,7 @@ const router = useRouter();
 
 const mediaStore = useMediaStore();
 
-const media = mediaStore.getMediaByKey(
-  constructMediaKey(props.mediaType, props.id)
-);
+const media = mediaStore.allMedia[constructMediaKey(props.mediaType, props.id)];
 
 const mediaExists = media !== undefined;
 
