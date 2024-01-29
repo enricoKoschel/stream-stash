@@ -47,6 +47,23 @@ export function createErrorDialog(msg: string): void {
   });
 }
 
+export function createWaitingDialog(msg: string): () => void {
+  const dialog = Dialog.create({
+    title: 'Info',
+    dark: true,
+    message: msg,
+    progress: true,
+    persistent: true,
+    ok: false,
+    color: 'white',
+    style: 'background-color: #1976d2',
+  });
+
+  return () => {
+    dialog.hide();
+  };
+}
+
 export function safeJsonParse<T>(str: string): T | undefined {
   try {
     return JSON.parse(str) as T;

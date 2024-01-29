@@ -2,6 +2,7 @@ import { BaseError, Result } from 'src/models/types';
 import { api } from 'boot/axios';
 import {
   createErrorDialog,
+  createWaitingDialog,
   ensureError,
   resultErr,
   resultOk,
@@ -56,10 +57,13 @@ export async function wwwAuthenticateV4RequestToken(
 
   authWindow.focus();
 
-  // TODO: Open dialog while waiting
+  const hide = createWaitingDialog('Waiting for login...');
+
   while (!authWindow.closed) {
     await sleep(2000);
   }
+
+  hide();
 
   return true;
 }
