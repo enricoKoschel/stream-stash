@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
+import { MediaType } from 'src/models/types';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,10 +28,10 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'mediaPage',
         component: () => import('pages/MaybeMediaPage.vue'),
-        props: (route) => {
+        props: (route): { id: number; mediaType: MediaType } => {
           return {
             id: Number(route.params.id),
-            mediaType: route.params.mediaType,
+            mediaType: route.params.mediaType as MediaType,
           };
         },
       },
