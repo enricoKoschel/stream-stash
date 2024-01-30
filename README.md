@@ -1,4 +1,4 @@
-# Stream Stash (stream-stash-frontend)
+# Stream Stash
 
 Companion for streaming movies, TV shows and anime.
 
