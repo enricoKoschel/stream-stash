@@ -3,6 +3,7 @@ import { Media } from 'src/models/types';
 import { v4GetListDetails } from 'src/models/tmdbApi';
 import { parseMedia } from 'src/models/methods';
 import { useAuthStore } from 'stores/authStore';
+import guestSessionMedia from 'src/models/guestSession';
 
 export const useMediaStore = defineStore('media', {
   state: () => ({
@@ -16,8 +17,7 @@ export const useMediaStore = defineStore('media', {
       authStore.init();
 
       if (!authStore.loggedIn) {
-        // TODO: Assign default media here for a guest session
-        this.allMedia = {};
+        this.allMedia = guestSessionMedia;
         return;
       }
 

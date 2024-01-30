@@ -2,6 +2,10 @@
 import MainToolbar from 'components/MainToolbar.vue';
 import WatchStateToolbar from 'components/WatchStateToolbar.vue';
 import MainFooter from 'components/MainFooter.vue';
+import GuestSessionBanner from 'components/GuestSessionBanner.vue';
+import { useAuthStore } from 'stores/authStore';
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -9,6 +13,7 @@ import MainFooter from 'components/MainFooter.vue';
     <q-header>
       <MainToolbar />
       <WatchStateToolbar />
+      <GuestSessionBanner v-if="!authStore.loggedIn" />
     </q-header>
 
     <q-page-container>
