@@ -1,8 +1,19 @@
 # Stream Stash (stream-stash-frontend)
 
-Companion for streaming movies, TV shows and anime
+Companion for streaming movies, TV shows and anime.
 
-## Install the dependencies
+## How to run locally
+
+### Install the Quasar CLI
+
+```bash
+yarn global add @quasar/cli
+# or
+npm install -g @quasar/cli
+```
+
+
+### Install the dependencies
 
 ```bash
 yarn
@@ -32,12 +43,8 @@ yarn format
 npm run format
 ```
 
-### Build the app for production
+### Build the app for deployment
 
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
