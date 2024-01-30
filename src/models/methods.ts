@@ -8,6 +8,7 @@ import {
 import { Dialog } from 'quasar';
 import { v4GetListDetailsRes } from 'src/models/tmdbApi';
 import { backdropUrl, posterUrl } from 'boot/axios';
+import router from 'src/router';
 
 export function sleep(ms: number): Promise<never> {
   return new Promise((r) => setTimeout(r, ms));
@@ -111,4 +112,11 @@ export function parseMedia(
   }
 
   return media;
+}
+
+export async function resetApp(): Promise<void> {
+  await router.push({ name: 'indexPage' });
+
+  // TODO: Check if `await mediaStore.init();` is sufficient
+  location.reload();
 }

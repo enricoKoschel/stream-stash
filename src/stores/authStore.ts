@@ -6,6 +6,7 @@ import {
   wwwAuthenticateV4RequestToken,
 } from 'src/models/tmdbApi';
 import { LocalStorage } from 'quasar';
+import { resetApp } from 'src/models/methods';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -34,6 +35,8 @@ export const useAuthStore = defineStore('auth', {
       await v4DeleteAccessToken(this.accessToken);
 
       this.accessToken = '';
+
+      await resetApp();
     },
     async login(): Promise<void> {
       const newRequestTokenResult = await v4NewRequestToken();
@@ -48,6 +51,8 @@ export const useAuthStore = defineStore('auth', {
       if (!newAccessTokenResult.success) return;
 
       this.accessToken = newAccessTokenResult.value.access_token;
+
+      await resetApp();
     },
   },
 });
