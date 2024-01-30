@@ -27,6 +27,8 @@ export const useAuthStore = defineStore('auth', {
         accessToken !== 'null'
       ) {
         this.accessToken = accessToken;
+      } else {
+        this.accessToken = '';
       }
     },
     async logout(): Promise<void> {
