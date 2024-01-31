@@ -105,8 +105,12 @@ export function parseMedia(
       title: item.media_type === 'tv' ? item.name : item.title,
       overview: item.overview,
       date: item.media_type === 'tv' ? item.first_air_date : item.release_date,
-      posterUrl: `${posterUrl}/${item.poster_path}`,
-      backdropUrl: `${backdropUrl}/${item.backdrop_path}`,
+      posterUrl: item.poster_path
+        ? `${posterUrl}/${item.poster_path}`
+        : undefined,
+      backdropUrl: item.backdrop_path
+        ? `${backdropUrl}/${item.backdrop_path}`
+        : undefined,
       watchState: comment.watchState,
       rating: comment.rating,
     };

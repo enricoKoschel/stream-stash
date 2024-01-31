@@ -46,6 +46,6 @@ export interface Media extends MediaComment {
   title: string;
   overview: string;
   date: string;
-  posterUrl: string;
-  backdropUrl: string;
+  posterUrl: string | undefined;
+  backdropUrl: string | undefined;
 }

@@ -120,15 +120,15 @@ export async function v4DeleteAccessToken(
 
 export interface v4GetListDetailsRes {
   average_rating: number;
-  backdrop_path: string;
+  backdrop_path: string | null;
   results: (
     | {
         adult: boolean;
-        backdrop_path: string;
+        backdrop_path: string | null;
         id: number;
         original_language: string;
         overview: string;
-        poster_path: string;
+        poster_path: string | null;
         genre_ids: number[];
         popularity: number;
         vote_average: number;
@@ -152,7 +152,7 @@ export interface v4GetListDetailsRes {
   )[];
   comments: Partial<Record<string, string | null>>;
   created_by: {
-    avatar_path: string;
+    avatar_path: string | null;
     gravatar_hash: string;
     id: string;
     name: string;
@@ -166,7 +166,7 @@ export interface v4GetListDetailsRes {
   name: string;
   object_ids: Record<string, never>;
   page: number;
-  poster_path: string;
+  poster_path: string | null;
   public: boolean;
   revenue: number;
   runtime: number;
