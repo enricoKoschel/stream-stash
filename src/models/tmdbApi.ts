@@ -189,3 +189,31 @@ export async function v4GetListDetails(
     return genericApiError(e, 'v4GetListDetails');
   }
 }
+
+export interface v3GetAllListsRes {
+  page: number;
+  results: {
+    description: string;
+    favorite_count: number;
+    id: number;
+    item_count: number;
+    iso_639_1: string;
+    list_type: string;
+    name: string;
+    poster_path: string | null;
+  }[];
+  total_pages: number;
+  total_results: number;
+}
+
+export async function v3GetAllLists(): Promise<ApiResult<v3GetAllListsRes>> {
+  try {
+    // TODO: Multiple pages
+    // Account ID of 0 in the URL means the account that opened the session is used
+    const response = await api.get<v3GetAllListsRes>('/3/account/0/lists');
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v3GetAllLists');
+  }
+}
