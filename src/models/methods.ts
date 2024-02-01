@@ -98,9 +98,10 @@ export function parseMedia(
 
     const commentString = details.comments[key] ?? '';
 
-    // TODO: Check for all fields that should be present on a comment and set default values for those that aren't
-    const comment = safeJsonParse<MediaComment>(commentString) ?? {
+    // Set defaults for fields that aren't present on the received comment
+    const comment = {
       ...defaultComment,
+      ...safeJsonParse<MediaComment>(commentString),
     };
 
     media[key] = {
