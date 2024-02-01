@@ -217,3 +217,59 @@ export async function v3GetAllLists(): Promise<ApiResult<v3GetAllListsRes>> {
     return genericApiError(e, 'v3GetAllLists');
   }
 }
+
+export interface v4CreateListRes {
+  status_message: string;
+  id: number;
+  success: boolean;
+  status_code: number;
+}
+
+export async function v4CreateList(
+  description: string,
+  name: string,
+  iso31661: string,
+  iso6391: string
+): Promise<ApiResult<v4CreateListRes>> {
+  try {
+    const response = await api.post<v4CreateListRes>('/4/list', {
+      description,
+      name,
+      iso_3166_1: iso31661,
+      iso_639_1: iso6391,
+      // The API is bugged, the value here does not matter, the list is always create publicly
+      public: true,
+    });
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v4CreateList');
+  }
+}
+
+export interface v4UpdateListRes {
+  success: boolean;
+  status_code: number;
+  status_message: string;
+}
+
+export async function v4UpdateList(
+  listId: number,
+  description: string | undefined,
+  name: string | undefined,
+  isPublic: boolean | undefined,
+  sortBy: string | undefined
+): Promise<ApiResult<v4UpdateListRes>> {
+  try {
+    const response = await api.put<v4UpdateListRes>(`/4/list/${listId}`, {
+      ...(description !== undefined && { description }),
+      ...(name !== undefined && { name }),
+      ...(isPublic !== undefined && { public: isPublic }),
+      ...(sortBy !== undefined && { sort_by: sortBy }),
+    });
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v4UpdateList');
+  }
+}

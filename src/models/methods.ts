@@ -6,7 +6,12 @@ import {
   Result,
 } from 'src/models/types';
 import { Dialog } from 'quasar';
-import { v4GetListDetailsRes } from 'src/models/tmdbApi';
+import {
+  v3GetAllLists,
+  v4CreateList,
+  v4GetListDetailsRes,
+  v4UpdateList,
+} from 'src/models/tmdbApi';
 import { backdropUrl, posterUrl } from 'boot/axios';
 import router from 'src/router';
 import { useMediaStore } from 'stores/mediaStore';
@@ -124,4 +129,39 @@ export async function resetApp(): Promise<void> {
 
   await router.push({ name: 'indexPage' });
   await mediaStore.init();
+}
+
+export async function getOrCreateDbList(): Promise<number | undefined> {
+  const dbListName = '[DO NOT RENAME/EDIT/DELETE] Stream Stash DB';
+
+  const getListsResult = await v3GetAllLists();
+
+  if (!getListsResult.success) return undefined;
+
+  const dbList = getListsResult.value.results.find(
+    (item) => item.name === dbListName
+  );
+
+  if (dbList) {
+    return dbList.id;
+  }
+
+  const createListResult = await v4CreateList('', dbListName, 'US', 'en');
+
+  if (!createListResult.success) return undefined;
+
+  const dbListId = createListResult.value.id;
+
+  // This is necessary to set the list to private
+  const updateListResult = await v4UpdateList(
+    dbListId,
+    undefined,
+    undefined,
+    false,
+    undefined
+  );
+
+  if (!updateListResult.success) return undefined;
+
+  return dbListId;
 }
