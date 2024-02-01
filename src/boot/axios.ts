@@ -22,6 +22,8 @@ const api = axios.create({
   },
 });
 
+// TODO: Add an interceptor that checks for rate limiting and disables API access for a while
+
 api.interceptors.request.use(function (config) {
   config.headers.Authorization = `Bearer ${
     process.env.TMDB_ACCESS_TOKEN ?? ''
