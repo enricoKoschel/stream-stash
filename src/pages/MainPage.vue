@@ -18,6 +18,8 @@ const filteredMedia: ComputedRef<Media[]> = computed(() => {
     return elem && elem.watchState === props.watchState;
   }) as Media[];
 });
+
+// TODO: Show unwatched seasons of watched shows in planning
 </script>
 
 <template>
