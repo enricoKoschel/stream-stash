@@ -1,6 +1,7 @@
 export type MediaType = 'tv' | 'movie';
 
-export type WatchState = 'watching' | 'planning' | 'watched';
+export const watchStateArray = ['watching', 'planning', 'watched'] as const;
+export type WatchState = (typeof watchStateArray)[number];
 
 type Jsonable =
   | string

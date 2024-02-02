@@ -4,6 +4,7 @@ import {
   MediaComment,
   MediaType,
   Result,
+  watchStateArray,
 } from 'src/models/types';
 import { Dialog } from 'quasar';
 import {
@@ -83,26 +84,48 @@ export function constructMediaKey(mediaType: MediaType, id: number): string {
   return `${mediaType}:${id}`;
 }
 
-export function parseMedia(
-  details: v4GetListDetailsRes
-): Partial<Record<string, Media>> {
+export function parseCommentWithDefaults(commentString: string): MediaComment {
   const defaultComment: MediaComment = {
     watchState: 'planning',
     rating: 0,
   };
 
+  const parsedComment = safeJsonParse<Partial<MediaComment>>(commentString);
+
+  // Delete fields whose values are not the correct type
+  if (parsedComment !== undefined) {
+    if (
+      typeof parsedComment.watchState !== 'string' ||
+      !watchStateArray.includes(parsedComment.watchState)
+    ) {
+      delete parsedComment.watchState;
+    }
+    if (
+      typeof parsedComment.rating !== 'number' ||
+      parsedComment.rating < 0 ||
+      parsedComment.rating > 5
+    ) {
+      delete parsedComment.rating;
+    }
+  }
+
+  // Keep defaults for all fields that are not present on parsedComment
+  return {
+    ...defaultComment,
+    ...parsedComment,
+  };
+}
+
+export function parseMedia(
+  details: v4GetListDetailsRes
+): Partial<Record<string, Media>> {
   const media: Partial<Record<string, Media>> = {};
 
   for (const item of details.results) {
     const key = constructMediaKey(item.media_type, item.id);
 
     const commentString = details.comments[key] ?? '';
-
-    // Set defaults for fields that aren't present on the received comment
-    const comment = {
-      ...defaultComment,
-      ...safeJsonParse<MediaComment>(commentString),
-    };
+    const comment = parseCommentWithDefaults(commentString);
 
     media[key] = {
       id: item.id,
