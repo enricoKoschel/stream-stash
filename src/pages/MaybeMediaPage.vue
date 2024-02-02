@@ -21,7 +21,11 @@ const media = mediaStore.allMedia[constructMediaKey(props.mediaType, props.id)];
 const mediaExists = media !== undefined;
 
 if (!mediaExists) {
-  await router.replace({ name: 'errorNotFound' });
+  /* Awaiting the promise gives the following error:
+   *   Cannot read properties of null (reading 'subTree')
+   * Not awaiting here is not problematic
+   */
+  void router.push({ name: 'errorNotFound' });
 }
 </script>
 
