@@ -37,7 +37,10 @@ export const useMediaStore = defineStore('media', {
         this.allMedia = {};
       }
     },
-    updateMediaComment(media: Media, newComment: Partial<MediaComment>): void {
+    async updateMediaComment(
+      media: Media,
+      newComment: Partial<MediaComment>
+    ): Promise<void> {
       // TODO: Batch multiple edits and send those edits to tmdb after x seconds?
 
       if (newComment.watchState !== undefined)
@@ -47,7 +50,8 @@ export const useMediaStore = defineStore('media', {
 
       if (this.dbListId === undefined) return;
 
-      void v4UpdateListItems(this.dbListId, [
+      // TODO: Show loading spinner somewhere while uploading
+      await v4UpdateListItems(this.dbListId, [
         {
           media_type: media.mediaType,
           media_id: media.id,

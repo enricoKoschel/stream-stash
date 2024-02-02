@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ImageWithFallback from 'components/ImageWithFallback.vue';
-import { Media } from 'src/models/types';
+import { Media, WatchState, watchStateArray } from 'src/models/types';
 import { useMediaStore } from 'stores/mediaStore';
+import { capitalizeFirstLetter } from 'src/models/methods';
 
 // Typescript can not resolve defineModel() for some reason
 // eslint-disable-next-line no-undef
@@ -13,12 +14,18 @@ function ratingColor(star: number): string {
   return model.value.rating >= star ? 'blue' : 'white';
 }
 
-function ratingClicked(star: number): void {
+async function ratingClicked(star: number): Promise<void> {
   if (model.value.rating === star) {
-    mediaStore.updateMediaComment(model.value, { rating: 0 });
+    await mediaStore.updateMediaComment(model.value, { rating: 0 });
   } else {
-    mediaStore.updateMediaComment(model.value, { rating: star });
+    await mediaStore.updateMediaComment(model.value, { rating: star });
   }
+}
+
+async function watchStateChanged(watchState: WatchState): Promise<void> {
+  await mediaStore.updateMediaComment(model.value, {
+    watchState,
+  });
 }
 </script>
 
@@ -37,26 +44,58 @@ function ratingClicked(star: number): void {
         style="border-radius: 5px; width: 12rem"
       />
 
-      <div class="row justify-center" style="margin-top: 1rem">
+      <q-select
+        dense
+        item-aligned
+        hide-dropdown-icon
+        popup-content-style="text-align: center;"
+        :option-label="capitalizeFirstLetter"
+        :model-value="model.watchState"
+        :options="watchStateArray"
+        style="
+          font-size: 1.2rem;
+          width: 12rem;
+          padding-left: 0;
+          padding-right: 0;
+        "
+        @update:model-value="watchStateChanged"
+      >
+        <template #selected>
+          <span class="flex justify-center" style="width: 100%">
+            {{ capitalizeFirstLetter(model.watchState) }}
+          </span>
+        </template>
+      </q-select>
+    </div>
+
+    <div style="width: 65%; margin-top: 10vh; margin-left: 2vw">
+      <p class="text-h6" style="margin: 0">
+        {{ model.title }}
+        <span style="opacity: 50%; font-size: 80%; margin-left: 0.3rem">
+          {{ model.date.slice(0, 4) }}
+        </span>
+      </p>
+
+      <div
+        style="
+          margin-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+          width: 130px;
+        "
+      >
         <q-btn
           v-for="i in 5"
           :key="i"
           icon="star"
           :color="ratingColor(i)"
           flat
-          style="max-width: calc(12rem / 5); flex-grow: 1"
+          size="0.8rem"
+          style="padding: 0"
           @click="ratingClicked(i)"
         />
       </div>
-    </div>
 
-    <div style="width: 65%; margin-top: 10vh; margin-left: 2vw">
-      <p class="text-h6">
-        {{ model.title }}
-        <span style="opacity: 50%; font-size: 80%; margin-left: 0.3rem">
-          {{ model.date.slice(0, 4) }}
-        </span>
-      </p>
       <p>{{ model.overview }}</p>
     </div>
   </q-page>
