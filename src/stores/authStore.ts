@@ -7,6 +7,7 @@ import {
 } from 'src/models/tmdbApi';
 import { LocalStorage } from 'quasar';
 import { resetApp } from 'src/models/methods';
+import { useMediaStore } from 'stores/mediaStore';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -37,6 +38,9 @@ export const useAuthStore = defineStore('auth', {
       await v4DeleteAccessToken(this.accessToken);
 
       this.accessToken = '';
+
+      const mediaStore = useMediaStore();
+      mediaStore.dbListId = undefined;
 
       await resetApp();
     },

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import ImageWithFallback from 'components/ImageWithFallback.vue';
 import { Media } from 'src/models/types';
+import { useMediaStore } from 'stores/mediaStore';
 
 // Typescript can not resolve defineModel() for some reason
 // eslint-disable-next-line no-undef
 const model = defineModel<Media>('media', { required: true });
+
+const mediaStore = useMediaStore();
 
 function ratingColor(star: number): string {
   return model.value.rating >= star ? 'blue' : 'white';
@@ -12,9 +15,9 @@ function ratingColor(star: number): string {
 
 function ratingClicked(star: number): void {
   if (model.value.rating === star) {
-    model.value.rating = 0;
+    mediaStore.updateMediaComment(model.value, { rating: 0 });
   } else {
-    model.value.rating = star;
+    mediaStore.updateMediaComment(model.value, { rating: star });
   }
 }
 </script>

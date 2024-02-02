@@ -1,4 +1,4 @@
-import { BaseError, Result } from 'src/models/types';
+import { BaseError, MediaType, Result } from 'src/models/types';
 import { api } from 'boot/axios';
 import {
   createErrorDialog,
@@ -271,5 +271,38 @@ export async function v4UpdateList(
     return resultOk(response.data);
   } catch (e) {
     return genericApiError(e, 'v4UpdateList');
+  }
+}
+
+export interface v4UpdateListItemsRes {
+  status_message: string;
+  results: {
+    media_type: MediaType;
+    media_id: number;
+    success: boolean;
+  }[];
+  success: boolean;
+  status_code: number;
+}
+
+export async function v4UpdateListItems(
+  listId: number,
+  items: {
+    media_type: MediaType;
+    media_id: number;
+    comment: string;
+  }[]
+): Promise<ApiResult<v4UpdateListItemsRes>> {
+  try {
+    const response = await api.put<v4UpdateListItemsRes>(
+      `/4/list/${listId}/items`,
+      {
+        items,
+      }
+    );
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v4UpdateListItems');
   }
 }
