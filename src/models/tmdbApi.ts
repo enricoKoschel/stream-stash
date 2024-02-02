@@ -237,7 +237,7 @@ export async function v4CreateList(
       name,
       iso_3166_1: iso31661,
       iso_639_1: iso6391,
-      // The API is bugged, the value here does not matter, the list is always create publicly
+      // The API is bugged, the value here does not matter, the list is always created publicly
       public: true,
     });
 
