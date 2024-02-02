@@ -9,6 +9,7 @@ export const useMediaStore = defineStore('media', {
   state: () => ({
     allMedia: {} as Partial<Record<string, Media>>,
     dbListId: undefined as number | undefined,
+    uploadTime: undefined as number | undefined,
   }),
   getters: {},
   actions: {
@@ -50,7 +51,9 @@ export const useMediaStore = defineStore('media', {
 
       if (this.dbListId === undefined) return;
 
-      // TODO: Show loading spinner somewhere while uploading
+      const time = new Date().getTime();
+      this.uploadTime = time;
+
       await v4UpdateListItems(this.dbListId, [
         {
           media_type: media.mediaType,
@@ -61,6 +64,10 @@ export const useMediaStore = defineStore('media', {
           }),
         },
       ]);
+
+      if (this.uploadTime === time) {
+        this.uploadTime = undefined;
+      }
     },
   },
 });

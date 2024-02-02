@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from 'stores/authStore';
+import { useMediaStore } from 'stores/mediaStore';
 
 const searchText = ref('');
 
 const authStore = useAuthStore();
+
+const mediaStore = useMediaStore();
 </script>
 
 <template>
@@ -31,6 +34,8 @@ const authStore = useAuthStore();
     </div>
 
     <div class="row justify-end" style="width: 100vw">
+      <q-spinner v-if="mediaStore.uploadTime !== undefined" size="35px" />
+
       <div v-if="authStore.loggedIn" class="row">
         <!-- TODO: Show username -->
         <q-btn label="Profile" flat no-caps :to="{ name: 'profilePage' }" />
