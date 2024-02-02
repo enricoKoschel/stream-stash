@@ -25,7 +25,7 @@ const filteredMedia: ComputedRef<Media[]> = computed(() => {
 <template>
   <q-page class="row items-baseline">
     <template v-if="filteredMedia.length > 0">
-      <media-card v-for="item in filteredMedia" :key="item.key" :media="item" />
+      <MediaCard v-for="item in filteredMedia" :key="item.key" :media="item" />
     </template>
     <div v-else class="flex justify-center" style="width: 100%; margin-top: 1%">
       <div class="text-h5">No media in {{ props.watchState }}</div>
