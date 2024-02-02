@@ -9,7 +9,7 @@ export const useMediaStore = defineStore('media', {
   state: () => ({
     allMedia: {} as Partial<Record<string, Media>>,
     dbListId: undefined as number | undefined,
-    uploadTime: undefined as number | undefined,
+    numberOfUploads: 0,
   }),
   getters: {},
   actions: {
@@ -44,6 +44,8 @@ export const useMediaStore = defineStore('media', {
     ): Promise<void> {
       // TODO: Batch multiple edits and send those edits to tmdb after x seconds?
 
+      if (Object.keys(newComment).length === 0) return;
+
       if (newComment.watchState !== undefined)
         media.watchState = newComment.watchState;
 
@@ -51,8 +53,7 @@ export const useMediaStore = defineStore('media', {
 
       if (this.dbListId === undefined) return;
 
-      const time = new Date().getTime();
-      this.uploadTime = time;
+      this.numberOfUploads++;
 
       await v4UpdateListItems(this.dbListId, [
         {
@@ -65,9 +66,7 @@ export const useMediaStore = defineStore('media', {
         },
       ]);
 
-      if (this.uploadTime === time) {
-        this.uploadTime = undefined;
-      }
+      this.numberOfUploads--;
     },
   },
 });

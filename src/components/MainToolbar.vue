@@ -34,7 +34,7 @@ const mediaStore = useMediaStore();
     </div>
 
     <div class="row justify-end" style="width: 100vw">
-      <q-spinner v-if="mediaStore.uploadTime !== undefined" size="35px" />
+      <q-spinner v-if="mediaStore.numberOfUploads !== 0" size="35px" />
 
       <div v-if="authStore.loggedIn" class="row">
         <!-- TODO: Show username -->
