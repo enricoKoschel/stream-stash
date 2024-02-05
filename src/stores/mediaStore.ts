@@ -16,7 +16,7 @@ export const useMediaStore = defineStore('media', {
     async init(): Promise<void> {
       const authStore = useAuthStore();
       // Call init() here because we are outside vue.js code and the init() from app.vue hasn't been called yet
-      authStore.init();
+      await authStore.init();
 
       if (!authStore.loggedIn) {
         this.allMedia = guestSessionMedia;

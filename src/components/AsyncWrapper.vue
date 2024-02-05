@@ -9,7 +9,7 @@ const mediaStore = useMediaStore();
 await mediaStore.init();
 
 const authStore = useAuthStore();
-authStore.init();
+await authStore.init();
 
 authStore.$subscribe((mutation, state) => {
   LocalStorage.set('accessToken', state.accessToken);

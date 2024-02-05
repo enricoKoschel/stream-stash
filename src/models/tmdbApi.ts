@@ -306,3 +306,33 @@ export async function v4UpdateListItems(
     return genericApiError(e, 'v4UpdateListItems');
   }
 }
+
+export interface v3GetUserDetailsRes {
+  avatar: {
+    gravatar: {
+      hash: string;
+    };
+    tmdb: {
+      avatar_path: string | null;
+    };
+  };
+  id: number;
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  include_adult: boolean;
+  username: string;
+}
+
+export async function v3GetUserDetails(): Promise<
+  ApiResult<v3GetUserDetailsRes>
+> {
+  try {
+    // Account ID of 0 in the URL means the account that opened the session is used
+    const response = await api.get<v3GetUserDetailsRes>('/3/account/0');
+
+    return resultOk(response.data);
+  } catch (e) {
+    return genericApiError(e, 'v3GetUserDetails');
+  }
+}

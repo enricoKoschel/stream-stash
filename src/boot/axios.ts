@@ -70,7 +70,8 @@ api.interceptors.request.use(async function (config) {
   try {
     const authStore = useAuthStore();
     // Call init() here because we are outside vue.js code and the init() from app.vue hasn't been called yet
-    authStore.init();
+    // noApi is important, otherwise init() will make a request which will go through this interceptor causing recursive calls
+    await authStore.init(true);
 
     if (authStore.loggedIn) {
       config.headers.Authorization = `Bearer ${authStore.accessToken}`;

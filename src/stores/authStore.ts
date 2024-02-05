@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import {
+  v3GetUserDetails,
   v4DeleteAccessToken,
   v4NewAccessToken,
   v4NewRequestToken,
@@ -12,6 +13,7 @@ import { useMediaStore } from 'stores/mediaStore';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     accessToken: '',
+    username: '',
   }),
   getters: {
     loggedIn(state): boolean {
@@ -19,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
     },
   },
   actions: {
-    init(): void {
+    async init(noApi = false): Promise<void> {
       const accessToken = LocalStorage.getItem<string>('accessToken');
 
       if (
@@ -28,6 +30,12 @@ export const useAuthStore = defineStore('auth', {
         accessToken !== 'null'
       ) {
         this.accessToken = accessToken;
+
+        if (noApi) return;
+
+        const result = await v3GetUserDetails();
+
+        this.username = result.success ? result.value.username : '';
       } else {
         this.accessToken = '';
       }
