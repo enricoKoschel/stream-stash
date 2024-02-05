@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { useAuthStore } from 'stores/authStore';
+import axiosRateLimit from 'axios-rate-limit';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -15,16 +16,53 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({
-  baseURL: 'https://api.themoviedb.org',
-  headers: {
-    Accept: 'application/json',
-  },
-});
+const api = axiosRateLimit(
+  axios.create({
+    baseURL: 'https://api.themoviedb.org',
+    headers: {
+      Accept: 'application/json',
+    },
+  }),
+  { maxRPS: 5 }
+);
 
-// TODO: Add an interceptor that checks for rate limiting and disables API access for a while
+let rateLimited = false;
+
+api.interceptors.response.use(
+  function (response) {
+    // Any status codes that lie within the range of 2xx cause this function to trigger
+    return response;
+  },
+  function (error: AxiosError) {
+    // Any status codes that fall outside the range of 2xx cause this function to trigger
+
+    if (error.response?.status === 429) {
+      // TMDB API is rate limiting us, disable request for a few seconds
+      rateLimited = true;
+
+      setTimeout(() => {
+        rateLimited = false;
+      }, 5000);
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 api.interceptors.request.use(function (config) {
+  const controller = new AbortController();
+
+  if (rateLimited) {
+    controller.abort();
+  }
+
+  return {
+    ...config,
+    signal: controller.signal,
+  };
+});
+
+api.interceptors.request.use(async function (config) {
   config.headers.Authorization = `Bearer ${
     process.env.TMDB_ACCESS_TOKEN ?? ''
   }`;
