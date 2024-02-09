@@ -37,12 +37,12 @@ const authStore = useAuthStore();
 
         <!-- TODO: Implement removing all data from TMDB -->
         <q-btn
-          text-color="blue"
+          text-color="white"
           label="Remove all data from the The Movie Database (TMDB)"
           flat
           disable
           no-caps
-          class="bg-dark"
+          class="bg-negative"
         />
       </div>
       <div v-else>
