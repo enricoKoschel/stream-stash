@@ -20,6 +20,7 @@ const filteredMedia: ComputedRef<Media[]> = computed(() => {
 });
 
 // TODO: Show unwatched seasons of watched shows in planning
+// TODO: Add sort by option (a-z, z-a, newest added, oldest added, newest released, oldest released, newest watched, oldest watched)
 </script>
 
 <template>
