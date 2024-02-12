@@ -35,9 +35,25 @@ export type Result<T, E extends BaseError> =
   | { success: true; value: T }
   | { success: false; error: E };
 
+export interface TvShowHistory {
+  rating: number;
+  startDate: string;
+  endDate: string;
+  name: string;
+}
+
+export interface MovieHistory {
+  rating: number;
+  watchDate: string;
+}
+
+export type MediaHistory = TvShowHistory | MovieHistory;
+
 export interface MediaComment {
   watchState: WatchState;
-  rating: number;
+  history:
+    | Partial<Record<number, TvShowHistory>>
+    | Partial<Record<number, MovieHistory>>;
 }
 
 export interface Media extends MediaComment {

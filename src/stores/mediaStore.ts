@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Media, MediaComment } from 'src/models/types';
+import { Media } from 'src/models/types';
 import { v4GetListDetails, v4UpdateListItems } from 'src/models/tmdbApi';
 import { getOrCreateDbList, parseMedia } from 'src/models/methods';
 import { useAuthStore } from 'stores/authStore';
@@ -38,18 +38,8 @@ export const useMediaStore = defineStore('media', {
         this.allMedia = {};
       }
     },
-    async updateMediaComment(
-      media: Media,
-      newComment: Partial<MediaComment>
-    ): Promise<void> {
+    async syncToDb(media: Media): Promise<void> {
       // TODO: Batch multiple edits and send those edits to tmdb after x seconds?
-
-      if (Object.keys(newComment).length === 0) return;
-
-      if (newComment.watchState !== undefined)
-        media.watchState = newComment.watchState;
-
-      if (newComment.rating !== undefined) media.rating = newComment.rating;
 
       if (this.dbListId === undefined) return;
 
@@ -61,7 +51,7 @@ export const useMediaStore = defineStore('media', {
           media_id: media.id,
           comment: JSON.stringify({
             watchState: media.watchState,
-            rating: media.rating,
+            history: media.history,
           }),
         },
       ]);

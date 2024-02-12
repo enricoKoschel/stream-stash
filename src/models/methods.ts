@@ -3,7 +3,10 @@ import {
   Media,
   MediaComment,
   MediaType,
+  MovieHistory,
   Result,
+  TvShowHistory,
+  WatchState,
   watchStateArray,
 } from 'src/models/types';
 import { Dialog } from 'quasar';
@@ -84,35 +87,91 @@ export function constructMediaKey(mediaType: MediaType, id: number): string {
   return `${mediaType}:${id}`;
 }
 
-export function parseCommentWithDefaults(commentString: string): MediaComment {
+export function isValidWatchState(value: unknown): value is WatchState {
+  // @ts-expect-error to check if the value is a valid WatchState
+  return typeof value === 'string' && watchStateArray.includes(value);
+}
+
+export function isValidMovieHistory(value: unknown): value is MovieHistory {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'rating' in value &&
+    typeof value.rating === 'number' &&
+    value.rating >= 0 &&
+    value.rating <= 5 &&
+    'watchDate' in value &&
+    typeof value.watchDate === 'string'
+  );
+}
+
+export function isValidTvShowHistory(value: unknown): value is TvShowHistory {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'rating' in value &&
+    typeof value.rating === 'number' &&
+    value.rating >= 0 &&
+    value.rating <= 5 &&
+    'startDate' in value &&
+    typeof value.startDate === 'string' &&
+    'endDate' in value &&
+    typeof value.endDate === 'string' &&
+    'name' in value &&
+    typeof value.name === 'string'
+  );
+}
+
+export function parseCommentWithDefaults(
+  commentString: string,
+  mediaType: MediaType
+): MediaComment {
   const defaultComment: MediaComment = {
     watchState: 'planning',
-    rating: 0,
+    history: {},
   };
 
-  const parsedComment = safeJsonParse<Partial<MediaComment>>(commentString);
+  const parsedComment = safeJsonParse<unknown>(commentString);
 
   // Delete fields whose values are not the correct type
-  if (parsedComment !== undefined) {
+  if (
+    parsedComment !== undefined &&
+    parsedComment !== null &&
+    typeof parsedComment === 'object'
+  ) {
     if (
-      typeof parsedComment.watchState !== 'string' ||
-      !watchStateArray.includes(parsedComment.watchState)
+      'watchState' in parsedComment &&
+      !isValidWatchState(parsedComment.watchState)
     ) {
       delete parsedComment.watchState;
     }
-    if (
-      typeof parsedComment.rating !== 'number' ||
-      parsedComment.rating < 0 ||
-      parsedComment.rating > 5
-    ) {
-      delete parsedComment.rating;
+
+    if ('history' in parsedComment) {
+      if (
+        typeof parsedComment.history === 'object' &&
+        parsedComment.history !== null
+      ) {
+        for (const key in parsedComment.history) {
+          const entry = (parsedComment.history as Record<string, unknown>)[key];
+
+          if (
+            (mediaType === 'tv' && !isValidTvShowHistory(entry)) ||
+            (mediaType === 'movie' && !isValidMovieHistory(entry))
+          ) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete (parsedComment.history as Record<string, unknown>)[key];
+          }
+        }
+      } else {
+        delete parsedComment.history;
+      }
     }
   }
 
   // Keep defaults for all fields that are not present on parsedComment
   return {
     ...defaultComment,
-    ...parsedComment,
+    ...(parsedComment as Partial<MediaComment>),
   };
 }
 
@@ -125,7 +184,7 @@ export function parseMedia(
     const key = constructMediaKey(item.media_type, item.id);
 
     const commentString = details.comments[key] ?? '';
-    const comment = parseCommentWithDefaults(commentString);
+    const comment = parseCommentWithDefaults(commentString, item.media_type);
 
     media[key] = {
       id: item.id,
@@ -141,7 +200,7 @@ export function parseMedia(
         ? `${backdropUrl}/${item.backdrop_path}`
         : undefined,
       watchState: comment.watchState,
-      rating: comment.rating,
+      history: comment.history,
     };
   }
 
