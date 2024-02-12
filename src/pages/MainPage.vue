@@ -24,7 +24,7 @@ const filteredMedia: ComputedRef<Media[]> = computed(() => {
 </script>
 
 <template>
-  <q-page class="row items-baseline">
+  <q-page class="row">
     <template v-if="filteredMedia.length > 0">
       <MediaCard v-for="item in filteredMedia" :key="item.key" :media="item" />
     </template>

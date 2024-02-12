@@ -7,7 +7,7 @@ import ImageWithFallback from 'components/ImageWithFallback.vue';
     <div style="width: 100vw">
       <div style="font-size: 3rem">About</div>
 
-      <div class="row justify-center items-center">
+      <div class="row flex-center">
         <ImageWithFallback
           src="src/assets/logos/TMDB.svg"
           fallback-icon-size="10px"

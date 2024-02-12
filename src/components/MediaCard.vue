@@ -23,7 +23,7 @@ const props = defineProps<Props>();
       class="img_main"
     />
 
-    <div class="img_text flex items-center justify-center" style="">
+    <div class="img_text flex flex-center" style="">
       <p style="text-align: center">
         {{ props.media.title }} <br />
         ({{ props.media.date.slice(0, 4) }})
