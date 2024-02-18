@@ -91,6 +91,7 @@ module.exports = {
     semi: 'error',
     'prefer-const': 'error',
     'eqeqeq': 'error',
+    'vue/no-unused-vars': 'warn',
 
     // plugin:@typescript-eslint/stylistic-type-checked
     '@typescript-eslint/adjacent-overload-signatures': 'error',

@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
-    "lint-pre-commit": "eslint --ext .js,.ts,.vue --rule \"@typescript-eslint/no-unused-vars: error\" ./",
+    "lint-pre-commit": "eslint --ext .js,.ts,.vue --rule \"@typescript-eslint/no-unused-vars: error\" --rule \"vue/no-unused-vars: error\" ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
