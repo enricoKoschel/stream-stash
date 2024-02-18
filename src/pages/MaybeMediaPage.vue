@@ -30,7 +30,7 @@ if (!mediaExists) {
 </script>
 
 <template>
-  <MediaPage v-if="mediaExists" v-model:media="media" />
+  <MediaPage v-if="mediaExists" v-model="media" />
 </template>
 
 <style scoped lang="scss"></style>

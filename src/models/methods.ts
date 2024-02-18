@@ -3,9 +3,8 @@ import {
   Media,
   MediaComment,
   MediaType,
-  MovieHistory,
+  MediaHistory,
   Result,
-  TvShowHistory,
   WatchState,
   watchStateArray,
 } from 'src/models/types';
@@ -75,6 +74,24 @@ export function createWaitingDialog(msg: string): () => void {
   };
 }
 
+export function createConfirmDialog(
+  msg: string,
+  onConfirm: () => void | Promise<void>
+): void {
+  Dialog.create({
+    title: 'Confirm',
+    dark: true,
+    message: msg,
+    cancel: { label: 'No', flat: true, color: '', class: 'text-primary' },
+    ok: { label: 'Yes', flat: true, color: '', class: 'text-primary' },
+    noBackdropDismiss: true,
+    color: 'primary',
+    focus: 'cancel',
+  }).onOk(() => {
+    Promise.resolve(onConfirm()).catch(console.error);
+  });
+}
+
 export function safeJsonParse<T>(str: string): T | undefined {
   try {
     return JSON.parse(str) as T;
@@ -92,20 +109,7 @@ export function isValidWatchState(value: unknown): value is WatchState {
   return typeof value === 'string' && watchStateArray.includes(value);
 }
 
-export function isValidMovieHistory(value: unknown): value is MovieHistory {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'rating' in value &&
-    typeof value.rating === 'number' &&
-    value.rating >= 0 &&
-    value.rating <= 5 &&
-    'watchDate' in value &&
-    typeof value.watchDate === 'string'
-  );
-}
-
-export function isValidTvShowHistory(value: unknown): value is TvShowHistory {
+export function isValidMediaHistory(value: unknown): value is MediaHistory {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -122,10 +126,7 @@ export function isValidTvShowHistory(value: unknown): value is TvShowHistory {
   );
 }
 
-export function parseCommentWithDefaults(
-  commentString: string,
-  mediaType: MediaType
-): MediaComment {
+export function parseCommentWithDefaults(commentString: string): MediaComment {
   const defaultComment: MediaComment = {
     watchState: 'planning',
     history: {},
@@ -154,10 +155,7 @@ export function parseCommentWithDefaults(
         for (const key in parsedComment.history) {
           const entry = (parsedComment.history as Record<string, unknown>)[key];
 
-          if (
-            (mediaType === 'tv' && !isValidTvShowHistory(entry)) ||
-            (mediaType === 'movie' && !isValidMovieHistory(entry))
-          ) {
+          if (!isValidMediaHistory(entry)) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete (parsedComment.history as Record<string, unknown>)[key];
           }
@@ -184,7 +182,7 @@ export function parseMedia(
     const key = constructMediaKey(item.media_type, item.id);
 
     const commentString = details.comments[key] ?? '';
-    const comment = parseCommentWithDefaults(commentString, item.media_type);
+    const comment = parseCommentWithDefaults(commentString);
 
     media[key] = {
       id: item.id,

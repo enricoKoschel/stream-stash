@@ -7,18 +7,34 @@ import {
   watchStateArray,
 } from 'src/models/types';
 import { useMediaStore } from 'stores/mediaStore';
-import { capitalizeFirstLetter } from 'src/models/methods';
+import { capitalizeFirstLetter, createConfirmDialog } from 'src/models/methods';
+import { computed } from 'vue';
+import PopupTextEdit from 'components/PopupTextEdit.vue';
 
 // Typescript can not resolve defineModel() for some reason
 // eslint-disable-next-line no-undef
-const model = defineModel<Media>('media', { required: true });
+const model = defineModel<Media>({ required: true });
 
 const mediaStore = useMediaStore();
 
 const media = model.value;
 
+const sortedHistory = computed(() => {
+  // Preserve number as key type
+  const entries = Object.entries(media.history) as unknown as [
+    number,
+    MediaHistory
+  ][];
+
+  entries.sort((a, b) => {
+    return b[0] - a[0];
+  });
+
+  return entries;
+});
+
 function ratingColor(star: number, item: MediaHistory): string {
-  return item.rating >= star ? 'blue' : 'white';
+  return item.rating >= star ? 'primary' : 'white';
 }
 
 async function ratingClicked(star: number, item: MediaHistory): Promise<void> {
@@ -40,18 +56,43 @@ async function watchStateChanged(watchState: WatchState): Promise<void> {
 async function addHistory(): Promise<void> {
   const id = Object.keys(media.history).length;
 
-  if (media.mediaType === 'tv') {
-    media.history[id] = {
-      rating: 0,
-      startDate: '',
-      endDate: '',
-      name: '',
-    };
+  media.history[id] = {
+    rating: 0,
+    startDate: '??.??.????',
+    endDate: '??.??.????',
+    name: 'Unnamed',
+  };
+
+  await mediaStore.syncToDb(media);
+}
+
+function removeHistory(id: number): void {
+  createConfirmDialog('Do you really want to delete?', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete media.history[id];
+
+    await mediaStore.syncToDb(media);
+  });
+}
+
+async function historyNameChanged(
+  name: string,
+  item: MediaHistory
+): Promise<void> {
+  item.name = name;
+
+  await mediaStore.syncToDb(media);
+}
+
+async function historyDateChanged(
+  date: string,
+  dateType: 'start' | 'end',
+  item: MediaHistory
+): Promise<void> {
+  if (dateType === 'start') {
+    item.startDate = date;
   } else {
-    media.history[id] = {
-      rating: 0,
-      watchDate: '',
-    };
+    item.endDate = date;
   }
 
   await mediaStore.syncToDb(media);
@@ -125,24 +166,64 @@ async function addHistory(): Promise<void> {
         </q-card>
 
         <q-card
-          v-for="item in media.history"
+          v-for="[id, item] in sortedHistory"
           :key="item"
           style="width: 40rem; margin: 1rem"
         >
-          <q-card-section class="text-h6">{{ item }}</q-card-section>
+          <q-card-section class="row">
+            <div class="col-3">
+              <div class="flex justify-between">
+                <q-btn
+                  v-for="star in 5"
+                  :key="star"
+                  icon="star"
+                  :color="ratingColor(star, item)"
+                  flat
+                  style="padding: 0"
+                  @click="ratingClicked(star, item)"
+                />
+              </div>
+            </div>
+
+            <PopupTextEdit
+              :model-value="item.name"
+              text-class="text-h6"
+              class="col-3 offset-2"
+              @update:model-value="(val) => historyNameChanged(val, item)"
+            />
+
+            <q-btn
+              icon="delete_forever"
+              flat
+              class="col-1 offset-3 text-negative no-padding"
+              @click="removeHistory(id)"
+            />
+          </q-card-section>
 
           <q-card-section
-            style="display: flex; justify-content: space-between; width: 150px"
+            v-if="media.mediaType === 'tv'"
+            class="flex justify-between"
           >
-            <q-btn
-              v-for="star in 5"
-              :key="star"
-              icon="star"
-              :color="ratingColor(star, item)"
-              flat
-              size="0.8rem"
-              style="padding: 0"
-              @click="ratingClicked(star, item)"
+            <PopupTextEdit
+              :model-value="item.startDate"
+              @update:model-value="
+                (val) => historyDateChanged(val, 'start', item)
+              "
+            />
+            -
+            <PopupTextEdit
+              :model-value="item.endDate"
+              @update:model-value="
+                (val) => historyDateChanged(val, 'end', item)
+              "
+            />
+          </q-card-section>
+          <q-card-section v-else>
+            <PopupTextEdit
+              :model-value="item.endDate"
+              @update:model-value="
+                (val) => historyDateChanged(val, 'end', item)
+              "
             />
           </q-card-section>
         </q-card>
