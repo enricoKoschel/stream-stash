@@ -9,10 +9,16 @@ const authStore = useAuthStore();
     <div style="width: 100vw">
       <div style="font-size: 3rem">Profile</div>
 
-      <div v-if="authStore.loggedIn">
-        <div class="text-h6" style="margin-bottom: 30px">
-          You are logged in as {{ authStore.username }}
-        </div>
+      <div v-if="authStore.data !== undefined">
+        <!--
+          v-text is used here because {{ Mustache }} interpolations seem to not respect type narrowing
+          (authStore.data remains possibly undefined)
+        -->
+        <div
+          class="text-h6"
+          style="margin-bottom: 30px"
+          v-text="`You are logged in as ${authStore.data.username}`"
+        />
 
         <div style="margin: 10px">
           <!-- TODO: Implement exporting/importing data -->

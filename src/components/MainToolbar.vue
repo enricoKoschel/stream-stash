@@ -36,8 +36,7 @@ const mediaStore = useMediaStore();
     <div class="row justify-end" style="width: 100vw">
       <q-spinner v-if="mediaStore.numberOfUploads !== 0" size="35px" />
 
-      <div v-if="authStore.loggedIn" class="row">
-        <!-- TODO: Show username -->
+      <div v-if="authStore.data !== undefined" class="row">
         <q-btn label="Profile" flat no-caps :to="{ name: 'profilePage' }" />
 
         <q-separator vertical />

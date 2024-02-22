@@ -73,8 +73,8 @@ api.interceptors.request.use(async function (config) {
     // noApi is important, otherwise init() will make a request which will go through this interceptor causing recursive calls
     await authStore.init(true);
 
-    if (authStore.loggedIn) {
-      config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+    if (authStore.data !== undefined) {
+      config.headers.Authorization = `Bearer ${authStore.data.accessToken}`;
     }
   } catch (e) {
     /* empty */

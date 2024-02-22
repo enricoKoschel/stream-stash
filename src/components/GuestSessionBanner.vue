@@ -1,7 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from 'stores/authStore';
+
+const authStore = useAuthStore();
+</script>
 
 <template>
-  <q-banner style="background-color: #f2c037; color: black">
+  <q-banner
+    v-if="authStore.data === undefined"
+    style="background-color: #f2c037; color: black"
+  >
     <div style="font-size: 1.2rem">
       You are currently in a read-only guest session, please log in for the full
       experience.

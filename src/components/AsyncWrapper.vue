@@ -12,7 +12,11 @@ const authStore = useAuthStore();
 await authStore.init();
 
 authStore.$subscribe((mutation, state) => {
-  LocalStorage.set('accessToken', state.accessToken);
+  if (state.data !== undefined) {
+    LocalStorage.set('accessToken', state.data.accessToken);
+  } else {
+    LocalStorage.remove('accessToken');
+  }
 });
 </script>
 
