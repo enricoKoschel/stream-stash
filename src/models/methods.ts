@@ -53,7 +53,7 @@ export function createErrorDialog(msg: string): void {
     message: msg,
     persistent: true,
     color: 'white',
-    style: 'background-color: #c10015',
+    class: 'bg-negative',
   });
 }
 
@@ -66,7 +66,7 @@ export function createWaitingDialog(msg: string): () => void {
     persistent: true,
     ok: false,
     color: 'white',
-    style: 'background-color: #1976d2',
+    class: 'bg-primary',
   });
 
   return () => {
@@ -82,11 +82,15 @@ export function createConfirmDialog(
     title: 'Confirm',
     dark: true,
     message: msg,
-    cancel: { label: 'No', flat: true, color: '', class: 'text-primary' },
-    ok: { label: 'Yes', flat: true, color: '', class: 'text-primary' },
+    cancel: { label: 'No', flat: true },
+    ok: {
+      label: 'Yes',
+      flat: true,
+      class: 'text-negative',
+    },
     noBackdropDismiss: true,
     color: 'primary',
-    focus: 'cancel',
+    focus: 'none',
   }).onOk(() => {
     Promise.resolve(onConfirm()).catch(console.error);
   });
