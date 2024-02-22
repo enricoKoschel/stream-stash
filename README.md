@@ -1,6 +1,7 @@
 # Stream Stash
 
-Companion for streaming movies, TV shows and anime.
+Companion for streaming movies, TV shows and anime. This repository represents the frontend of the app, the backend can
+be found [here](https://github.com/enricoKoschel/stream_stash_backend).
 
 ## How to run locally
 
