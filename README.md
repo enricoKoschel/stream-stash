@@ -56,8 +56,16 @@ yarn format
 npm run format
 ```
 
-### Build the app for deployment
+## Deploy the app
+
+### Build the app for production
 
 ```bash
 quasar build
+```
+
+### Run local webserver with the build output
+
+```bash
+quasar serve ./dist/spa --history
 ```
