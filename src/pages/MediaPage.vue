@@ -23,7 +23,7 @@ const sortedHistory = computed(() => {
   // Preserve number as key type
   const entries = Object.entries(media.history) as unknown as [
     number,
-    MediaHistory
+    MediaHistory,
   ][];
 
   entries.sort((a, b) => {
@@ -77,7 +77,7 @@ function removeHistory(id: number): void {
 
 async function historyNameChanged(
   name: string,
-  item: MediaHistory
+  item: MediaHistory,
 ): Promise<void> {
   item.name = name;
 
@@ -87,7 +87,7 @@ async function historyNameChanged(
 async function historyDateChanged(
   date: string,
   dateType: 'start' | 'end',
-  item: MediaHistory
+  item: MediaHistory,
 ): Promise<void> {
   if (dateType === 'start') {
     item.startDate = date;
@@ -189,7 +189,9 @@ async function historyDateChanged(
               :model-value="item.name"
               text-class="text-h6"
               class="col-3 offset-2"
-              @update:model-value="(val) => historyNameChanged(val, item)"
+              @update:model-value="
+                (val: string) => historyNameChanged(val, item)
+              "
             />
 
             <q-btn
@@ -207,14 +209,14 @@ async function historyDateChanged(
             <PopupTextEdit
               :model-value="item.startDate"
               @update:model-value="
-                (val) => historyDateChanged(val, 'start', item)
+                (val: string) => historyDateChanged(val, 'start', item)
               "
             />
             -
             <PopupTextEdit
               :model-value="item.endDate"
               @update:model-value="
-                (val) => historyDateChanged(val, 'end', item)
+                (val: string) => historyDateChanged(val, 'end', item)
               "
             />
           </q-card-section>
@@ -222,7 +224,7 @@ async function historyDateChanged(
             <PopupTextEdit
               :model-value="item.endDate"
               @update:model-value="
-                (val) => historyDateChanged(val, 'end', item)
+                (val: string) => historyDateChanged(val, 'end', item)
               "
             />
           </q-card-section>

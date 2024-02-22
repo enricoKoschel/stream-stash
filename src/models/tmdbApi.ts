@@ -32,7 +32,7 @@ export async function v4NewRequestToken(): Promise<
 > {
   try {
     const response = await api.post<v4NewRequestTokenRes>(
-      '/4/auth/request_token'
+      '/4/auth/request_token',
     );
 
     return resultOk(response.data);
@@ -42,14 +42,14 @@ export async function v4NewRequestToken(): Promise<
 }
 
 export async function wwwAuthenticateV4RequestToken(
-  requestToken: string
+  requestToken: string,
 ): Promise<boolean> {
   const url = `https://www.themoviedb.org/auth/access?request_token=${requestToken}`;
   const authWindow = window.open(url, '_blank');
 
   if (!authWindow) {
     createErrorDialog(
-      'The login page could not be opened. Please make sure you allow popups from Stream Stash.'
+      'The login page could not be opened. Please make sure you allow popups from Stream Stash.',
     );
 
     return false;
@@ -77,12 +77,12 @@ export interface v4NewAccessTokenRes {
 }
 
 export async function v4NewAccessToken(
-  requestToken: string
+  requestToken: string,
 ): Promise<ApiResult<v4NewAccessTokenRes>> {
   try {
     const response = await api.post<v4NewAccessTokenRes>(
       '/4/auth/access_token',
-      { request_token: requestToken }
+      { request_token: requestToken },
     );
 
     return resultOk(response.data);
@@ -90,7 +90,7 @@ export async function v4NewAccessToken(
     const error = ensureError(e);
 
     createErrorDialog(
-      'A secure connection to TMDB could not be established. Please make sure to allow Stream Stash access to your account.'
+      'A secure connection to TMDB could not be established. Please make sure to allow Stream Stash access to your account.',
     );
 
     return resultErr(error);
@@ -104,12 +104,12 @@ export interface v4DeleteAccessTokenRes {
 }
 
 export async function v4DeleteAccessToken(
-  accessToken: string
+  accessToken: string,
 ): Promise<ApiResult<v4DeleteAccessTokenRes>> {
   try {
     const response = await api.delete<v4DeleteAccessTokenRes>(
       '/4/auth/access_token',
-      { data: { access_token: accessToken } }
+      { data: { access_token: accessToken } },
     );
 
     return resultOk(response.data);
@@ -121,35 +121,33 @@ export async function v4DeleteAccessToken(
 export interface v4GetListDetailsRes {
   average_rating: number;
   backdrop_path: string | null;
-  results: (
+  results: ({
+    adult: boolean;
+    backdrop_path: string | null;
+    id: number;
+    original_language: string;
+    overview: string;
+    poster_path: string | null;
+    genre_ids: number[];
+    popularity: number;
+    vote_average: number;
+    vote_count: number;
+  } & (
     | {
-        adult: boolean;
-        backdrop_path: string | null;
-        id: number;
-        original_language: string;
-        overview: string;
-        poster_path: string | null;
-        genre_ids: number[];
-        popularity: number;
-        vote_average: number;
-        vote_count: number;
-      } & (
-        | {
-            media_type: 'movie';
-            title: string;
-            original_title: string;
-            release_date: string;
-            video: boolean;
-          }
-        | {
-            media_type: 'tv';
-            first_air_date: string;
-            name: string;
-            origin_country: string[];
-            original_name: string;
-          }
-      )
-  )[];
+        media_type: 'movie';
+        title: string;
+        original_title: string;
+        release_date: string;
+        video: boolean;
+      }
+    | {
+        media_type: 'tv';
+        first_air_date: string;
+        name: string;
+        origin_country: string[];
+        original_name: string;
+      }
+  ))[];
   comments: Partial<Record<string, string | null>>;
   created_by: {
     avatar_path: string | null;
@@ -176,12 +174,12 @@ export interface v4GetListDetailsRes {
 }
 
 export async function v4GetListDetails(
-  listId: number
+  listId: number,
 ): Promise<ApiResult<v4GetListDetailsRes>> {
   try {
     //TODO: multiple pages
     const response: AxiosResponse<v4GetListDetailsRes> = await api.get(
-      `/4/list/${listId}`
+      `/4/list/${listId}`,
     );
 
     return resultOk(response.data);
@@ -229,7 +227,7 @@ export async function v4CreateList(
   description: string,
   name: string,
   iso31661: string,
-  iso6391: string
+  iso6391: string,
 ): Promise<ApiResult<v4CreateListRes>> {
   try {
     const response = await api.post<v4CreateListRes>('/4/list', {
@@ -258,7 +256,7 @@ export async function v4UpdateList(
   description: string | undefined,
   name: string | undefined,
   isPublic: boolean | undefined,
-  sortBy: string | undefined
+  sortBy: string | undefined,
 ): Promise<ApiResult<v4UpdateListRes>> {
   try {
     const response = await api.put<v4UpdateListRes>(`/4/list/${listId}`, {
@@ -291,14 +289,14 @@ export async function v4UpdateListItems(
     media_type: MediaType;
     media_id: number;
     comment: string;
-  }[]
+  }[],
 ): Promise<ApiResult<v4UpdateListItemsRes>> {
   try {
     const response = await api.put<v4UpdateListItemsRes>(
       `/4/list/${listId}/items`,
       {
         items,
-      }
+      },
     );
 
     return resultOk(response.data);

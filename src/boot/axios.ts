@@ -23,7 +23,7 @@ const api = axiosRateLimit(
       Accept: 'application/json',
     },
   }),
-  { maxRPS: 5 }
+  { maxRPS: 5 },
 );
 
 let rateLimited = false;
@@ -46,7 +46,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.request.use(function (config) {

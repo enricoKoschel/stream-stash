@@ -34,7 +34,7 @@ export function ensureError(value: unknown): Error {
   }
 
   return new Error(
-    `This value was thrown as is, not through an Error: ${valueString}`
+    `This value was thrown as is, not through an Error: ${valueString}`,
   );
 }
 
@@ -76,7 +76,7 @@ export function createWaitingDialog(msg: string): () => void {
 
 export function createConfirmDialog(
   msg: string,
-  onConfirm: () => void | Promise<void>
+  onConfirm: () => void | Promise<void>,
 ): void {
   Dialog.create({
     title: 'Confirm',
@@ -178,7 +178,7 @@ export function parseCommentWithDefaults(commentString: string): MediaComment {
 }
 
 export function parseMedia(
-  details: v4GetListDetailsRes
+  details: v4GetListDetailsRes,
 ): Partial<Record<string, Media>> {
   const media: Partial<Record<string, Media>> = {};
 
@@ -224,7 +224,7 @@ export async function getOrCreateDbList(): Promise<number | undefined> {
   if (!getListsResult.success) return undefined;
 
   const dbList = getListsResult.value.results.find(
-    (item) => item.name === dbListName
+    (item) => item.name === dbListName,
   );
 
   if (dbList) {
@@ -243,7 +243,7 @@ export async function getOrCreateDbList(): Promise<number | undefined> {
     undefined,
     undefined,
     false,
-    undefined
+    undefined,
   );
 
   if (!updateListResult.success) return undefined;

@@ -74,6 +74,8 @@ $text-color: #fff;
   visibility: hidden;
   opacity: 0;
 
-  transition: opacity $transition-duration, visibility $transition-duration;
+  transition:
+    opacity $transition-duration,
+    visibility $transition-duration;
 }
 </style>

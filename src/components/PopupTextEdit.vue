@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<Props>(), { textClass: '' });
         dense
         autofocus
         @keyup.enter="scope.set"
-        @focus="(input) => input.target.select()"
+        @focus="(input) => (input.target as HTMLInputElement).select()"
       />
     </q-popup-edit>
   </div>
