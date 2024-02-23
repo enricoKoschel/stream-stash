@@ -15,7 +15,8 @@ import routes from './routes';
  * with the Router instance.
  */
 
-if (process.env.SERVER) {
+const server = process.env.SERVER as boolean | undefined;
+if (server !== undefined && server) {
   throw new Error('Building with SSR requires changing the router boot file');
 }
 

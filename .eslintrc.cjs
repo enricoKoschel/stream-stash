@@ -92,6 +92,7 @@ module.exports = {
     'prefer-const': 'error',
     'eqeqeq': 'error',
     'vue/no-unused-vars': 'warn',
+    '@typescript-eslint/strict-boolean-expressions': 'error',
 
     // plugin:@typescript-eslint/stylistic-type-checked
     '@typescript-eslint/adjacent-overload-signatures': 'error',

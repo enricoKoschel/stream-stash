@@ -27,7 +27,8 @@ export const useAuthStore = defineStore('auth', {
       const accessToken = LocalStorage.getItem<string>('accessToken');
 
       if (
-        accessToken &&
+        accessToken !== null &&
+        accessToken !== '' &&
         accessToken !== 'undefined' &&
         accessToken !== 'null'
       ) {
