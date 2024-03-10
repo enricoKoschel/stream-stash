@@ -2,12 +2,17 @@
 import { ref } from 'vue';
 import { useAuthStore } from 'stores/authStore';
 import { useMediaStore } from 'stores/mediaStore';
+import { GoogleLogin } from 'vue3-google-login';
 
 const searchText = ref('');
 
 const authStore = useAuthStore();
 
 const mediaStore = useMediaStore();
+
+function googleLoginCallback(response: unknown): void {
+  console.log(response);
+}
 </script>
 
 <template>
@@ -45,6 +50,7 @@ const mediaStore = useMediaStore();
       </div>
       <div v-else class="row">
         <q-btn label="Login" flat no-caps @click="authStore.login()" />
+        <GoogleLogin :callback="googleLoginCallback" />
       </div>
     </div>
   </q-toolbar>
