@@ -2,17 +2,31 @@
 import { ref } from 'vue';
 import { useAuthStore } from 'stores/authStore';
 import { useMediaStore } from 'stores/mediaStore';
-import { GoogleLogin } from 'vue3-google-login';
+import { CallbackTypes, googleSdkLoaded } from 'vue3-google-login';
 
 const searchText = ref('');
 
 const authStore = useAuthStore();
-
 const mediaStore = useMediaStore();
 
-function googleLoginCallback(response: unknown): void {
-  console.log(response);
+function googleLoginClicked(): void {
+  googleSdkLoaded((google) => {
+    google.accounts.oauth2
+      .initTokenClient({
+        client_id:
+          '100227495150-cnu571i10u1689hgq5t08t4qi5ojrhq1.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/drive.appdata',
+        callback: googleLoginCallback,
+      })
+      .requestAccessToken();
+  });
 }
+
+const googleLoginCallback: CallbackTypes.TokenResponseCallback = (res) => {
+  //authStore.login()
+  // TODO Send access_token to backend for authorization and session creation. When backend returns successfully, fully login.
+  console.log('response:', res);
+};
 </script>
 
 <template>
@@ -49,8 +63,7 @@ function googleLoginCallback(response: unknown): void {
         <q-btn label="Logout" flat no-caps @click="authStore.logout()" />
       </div>
       <div v-else class="row">
-        <q-btn label="Login" flat no-caps @click="authStore.login()" />
-        <GoogleLogin :callback="googleLoginCallback" />
+        <q-btn label="Login" flat no-caps @click="googleLoginClicked()" />
       </div>
     </div>
   </q-toolbar>
