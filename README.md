@@ -11,16 +11,12 @@ Run all the following commands in the root directory of the project
 
 ```bash
 yarn global add @quasar/cli
-# or
-npm install -g @quasar/cli
 ```
 
 ### Install the dependencies
 
 ```bash
 yarn
-# or
-npm install
 ```
 
 ### Request API access to [The Movie Database](https://www.themoviedb.org)
@@ -45,16 +41,12 @@ quasar dev
 
 ```bash
 yarn lint
-# or
-npm run lint
 ```
 
 ### Format the files
 
 ```bash
 yarn format
-# or
-npm run format
 ```
 
 ## Deploy the app
