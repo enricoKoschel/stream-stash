@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useAuthStore } from 'stores/authStore';
+import { getUserInfo } from 'src/models/backendApi';
 
-const authStore = useAuthStore();
+const userInfo = await getUserInfo();
 </script>
 
 <template>
   <q-banner
-    v-if="authStore.data === undefined"
+    v-if="!userInfo.success || !userInfo.value.loggedIn"
     style="background-color: #f2c037; color: black"
   >
     <div style="font-size: 1.2rem">

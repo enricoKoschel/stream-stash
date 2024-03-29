@@ -1,32 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuthStore } from 'stores/authStore';
 import { useMediaStore } from 'stores/mediaStore';
-import { CallbackTypes, googleSdkLoaded } from 'vue3-google-login';
+import { getUserInfo, googleLogin, logout } from 'src/models/backendApi';
 
 const searchText = ref('');
 
-const authStore = useAuthStore();
 const mediaStore = useMediaStore();
 
-function googleLoginClicked(): void {
-  googleSdkLoaded((google) => {
-    google.accounts.oauth2
-      .initTokenClient({
-        client_id:
-          '100227495150-cnu571i10u1689hgq5t08t4qi5ojrhq1.apps.googleusercontent.com',
-        scope: 'https://www.googleapis.com/auth/drive.appdata',
-        callback: googleLoginCallback,
-      })
-      .requestAccessToken();
-  });
+const userInfo = await getUserInfo();
+
+async function loginClicked(): Promise<void> {
+  const response = await googleLogin();
+
+  // TODO: Make sure user checks all boxes
+  if (response.success) {
+    window.location.href = response.value;
+  }
 }
 
-const googleLoginCallback: CallbackTypes.TokenResponseCallback = (res) => {
-  //authStore.login()
-  // TODO Send access_token to backend for authorization and session creation. When backend returns successfully, fully login.
-  console.log('response:', res);
-};
+async function logoutClicked(): Promise<void> {
+  await logout();
+}
 </script>
 
 <template>
@@ -55,15 +49,15 @@ const googleLoginCallback: CallbackTypes.TokenResponseCallback = (res) => {
     <div class="row justify-end" style="width: 100vw">
       <q-spinner v-if="mediaStore.numberOfUploads !== 0" size="35px" />
 
-      <div v-if="authStore.data !== undefined" class="row">
+      <div v-if="userInfo.success && userInfo.value.loggedIn" class="row">
         <q-btn label="Profile" flat no-caps :to="{ name: 'profilePage' }" />
 
         <q-separator vertical />
 
-        <q-btn label="Logout" flat no-caps @click="authStore.logout()" />
+        <q-btn label="Logout" flat no-caps @click="logoutClicked()" />
       </div>
       <div v-else class="row">
-        <q-btn label="Login" flat no-caps @click="googleLoginClicked()" />
+        <q-btn label="Login" flat no-caps @click="loginClicked()" />
       </div>
     </div>
   </q-toolbar>

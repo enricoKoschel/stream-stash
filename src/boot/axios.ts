@@ -1,6 +1,5 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { useAuthStore } from 'stores/authStore';
 import axiosRateLimit from 'axios-rate-limit';
 
 declare module '@vue/runtime-core' {
@@ -10,6 +9,11 @@ declare module '@vue/runtime-core' {
   }
 }
 
+const backendUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.stream-stash.com'
+    : 'http://localhost:8080';
+
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
 // If any client changes this (global) instance, it might be a
@@ -18,12 +22,13 @@ declare module '@vue/runtime-core' {
 // for each client)
 const api = axiosRateLimit(
   axios.create({
-    baseURL: 'https://api.themoviedb.org',
+    baseURL: backendUrl,
     headers: {
       Accept: 'application/json',
     },
+    withCredentials: true,
   }),
-  { maxRPS: 5 },
+  { maxRPS: 2 },
 );
 
 let rateLimited = false;
@@ -62,30 +67,6 @@ api.interceptors.request.use(function (config) {
   };
 });
 
-api.interceptors.request.use(async function (config) {
-  config.headers.Authorization = `Bearer ${
-    process.env.TMDB_ACCESS_TOKEN ?? ''
-  }`;
-
-  try {
-    const authStore = useAuthStore();
-    // Call init() here because we are outside vue.js code and the init() from app.vue hasn't been called yet
-    // noApi is important, otherwise init() will make a request which will go through this interceptor causing recursive calls
-    await authStore.init(true);
-
-    if (authStore.data !== undefined) {
-      config.headers.Authorization = `Bearer ${authStore.data.accessToken}`;
-    }
-  } catch (e) {
-    /* empty */
-  }
-
-  return config;
-});
-
-const posterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2';
-const backdropUrl = 'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2';
-
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
@@ -98,4 +79,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api, posterUrl, backdropUrl };
+export { api };

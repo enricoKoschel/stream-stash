@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useAuthStore } from 'stores/authStore';
+import { getUserInfo } from 'src/models/backendApi';
 
-const authStore = useAuthStore();
+const userInfo = await getUserInfo();
 </script>
 
 <template>
@@ -9,15 +9,12 @@ const authStore = useAuthStore();
     <div style="width: 100vw">
       <div style="font-size: 3rem">Profile</div>
 
-      <div v-if="authStore.data !== undefined">
-        <!--
-          v-text is used here because {{ Mustache }} interpolations seem to not respect type narrowing
-          (authStore.data remains possibly undefined)
-        -->
+      <div v-if="userInfo.success && userInfo.value.loggedIn">
+        <!-- v-text is used here because {{ Mustache }} interpolation seems to not respect type narrowing -->
         <div
           class="text-h6"
           style="margin-bottom: 30px"
-          v-text="`You are logged in as ${authStore.data.username}`"
+          v-text="`You are logged in as ${userInfo.value.username}`"
         />
 
         <div style="margin: 10px">

@@ -57,3 +57,7 @@ export interface Media extends MediaComment {
   posterUrl: string | undefined;
   backdropUrl: string | undefined;
 }
+
+export type UserInfo =
+  | { loggedIn: false }
+  | { loggedIn: true; username: string };

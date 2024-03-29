@@ -48,6 +48,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/ProfilePage.vue'),
   },
   {
+    path: '/loginRedirect',
+    name: 'loginRedirectPage',
+    component: () => import('pages/LoginRedirectPage.vue'),
+  },
+  {
     path: '/notFound',
     name: 'errorNotFound',
     component: () => import('pages/ErrorNotFound.vue'),
