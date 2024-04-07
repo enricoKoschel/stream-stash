@@ -16,10 +16,14 @@ if ('code' in query) {
   );
 }
 
-// TODO: Use resetApp() here?
-await router.push({ name: 'indexPage' });
+// Awaiting router.push() seems to not perform the navigation correctly for some reason
+void router.push({ name: 'indexPage' });
 </script>
 
-<template>You will be redirected shortly...</template>
+<template>
+  You will be redirected shortly...<br />
+  If not please click
+  <router-link :to="{ name: 'indexPage' }">here</router-link>
+</template>
 
 <style scoped lang="scss"></style>

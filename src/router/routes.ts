@@ -5,7 +5,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'indexPage',
-    redirect: { name: 'mainPage', params: { watchState: 'watching' } },
+    redirect: { name: 'overviewPage', params: { watchState: 'watching' } },
   },
   {
     path: '/:watchState(watching|planning|watched)',
@@ -13,8 +13,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: 'mainPage',
-        component: () => import('pages/MainPage.vue'),
+        name: 'overviewPage',
+        component: () => import('pages/OverviewPage.vue'),
         props: true,
       },
     ],

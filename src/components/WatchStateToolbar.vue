@@ -5,15 +5,15 @@
     <q-tabs no-caps>
       <q-route-tab
         label="Watching"
-        :to="{ name: 'mainPage', params: { watchState: 'watching' } }"
+        :to="{ name: 'overviewPage', params: { watchState: 'watching' } }"
       />
       <q-route-tab
         label="Planning"
-        :to="{ name: 'mainPage', params: { watchState: 'planning' } }"
+        :to="{ name: 'overviewPage', params: { watchState: 'planning' } }"
       />
       <q-route-tab
         label="Watched"
-        :to="{ name: 'mainPage', params: { watchState: 'watched' } }"
+        :to="{ name: 'overviewPage', params: { watchState: 'watched' } }"
       />
     </q-tabs>
   </q-toolbar>

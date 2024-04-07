@@ -2,7 +2,6 @@ import { BaseError, Result, UserInfo } from 'src/models/types';
 import {
   createErrorDialog,
   ensureError,
-  resetApp,
   resultErr,
   resultOk,
 } from 'src/models/methods';
@@ -66,8 +65,6 @@ export async function finishLogin(code: string): Promise<ApiResult<void>> {
 export async function logout(): Promise<ApiResult<void>> {
   try {
     await api.delete<never>('/v1/logout');
-    // TODO: Doesn't reset?
-    await resetApp();
 
     return resultOk(undefined);
   } catch (e) {

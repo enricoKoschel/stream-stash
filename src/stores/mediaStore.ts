@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 import { Media } from 'src/models/types';
 import { sleep } from 'src/models/methods';
+import guestSession from 'src/models/guestSession';
+
+// TODO: Complete overhaul
 
 export const useMediaStore = defineStore('media', {
   state: () => ({
@@ -10,6 +13,7 @@ export const useMediaStore = defineStore('media', {
   getters: {},
   actions: {
     async init(): Promise<void> {
+      this.allMedia = guestSession;
       await sleep(1);
     },
     async syncToDb(media: Media): Promise<void> {

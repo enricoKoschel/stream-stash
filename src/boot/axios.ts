@@ -1,5 +1,5 @@
 import { boot } from 'quasar/wrappers';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import axiosRateLimit from 'axios-rate-limit';
 
 declare module '@vue/runtime-core' {
@@ -28,44 +28,8 @@ const api = axiosRateLimit(
     },
     withCredentials: true,
   }),
-  { maxRPS: 2 },
+  { maxRPS: 5 },
 );
-
-let rateLimited = false;
-
-api.interceptors.response.use(
-  function (response) {
-    // Any status codes that lie within the range of 2xx cause this function to trigger
-    return response;
-  },
-  function (error: AxiosError) {
-    // Any status codes that fall outside the range of 2xx cause this function to trigger
-
-    if (error.response?.status === 429) {
-      // TMDB API is rate limiting us, disable request for a few seconds
-      rateLimited = true;
-
-      setTimeout(() => {
-        rateLimited = false;
-      }, 5000);
-    }
-
-    return Promise.reject(error);
-  },
-);
-
-api.interceptors.request.use(function (config) {
-  const controller = new AbortController();
-
-  if (rateLimited) {
-    controller.abort();
-  }
-
-  return {
-    ...config,
-    signal: controller.signal,
-  };
-});
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

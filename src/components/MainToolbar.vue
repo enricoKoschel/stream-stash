@@ -9,10 +9,13 @@ const mediaStore = useMediaStore();
 
 const userInfo = await getUserInfo();
 
+// TODO: Have skeleton loader so page doesn't jump around when toolbar is loaded
+
 async function loginClicked(): Promise<void> {
   const response = await googleLogin();
 
   // TODO: Make sure user checks all boxes
+  // TODO: Save current page in state query param and navigate back there after redirect
   if (response.success) {
     window.location.href = response.value;
   }
@@ -20,6 +23,7 @@ async function loginClicked(): Promise<void> {
 
 async function logoutClicked(): Promise<void> {
   await logout();
+  location.reload();
 }
 </script>
 

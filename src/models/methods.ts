@@ -8,8 +8,6 @@ import {
   watchStateArray,
 } from 'src/models/types';
 import { Dialog } from 'quasar';
-import router from 'src/router';
-import { useMediaStore } from 'stores/mediaStore';
 
 export function sleep(ms: number): Promise<never> {
   return new Promise((r) => setTimeout(r, ms));
@@ -122,6 +120,7 @@ export function isValidMediaHistory(value: unknown): value is MediaHistory {
   );
 }
 
+// TODO: Remove?
 export function parseCommentWithDefaults(commentString: string): MediaComment {
   const defaultComment: MediaComment = {
     watchState: 'planning',
@@ -167,13 +166,6 @@ export function parseCommentWithDefaults(commentString: string): MediaComment {
     ...defaultComment,
     ...(parsedComment as Partial<MediaComment>),
   };
-}
-
-export async function resetApp(): Promise<void> {
-  const mediaStore = useMediaStore();
-
-  await router.push({ name: 'indexPage' });
-  await mediaStore.init();
 }
 
 export function capitalizeFirstLetter(str: string): string {

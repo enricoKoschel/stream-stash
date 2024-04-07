@@ -38,10 +38,10 @@ const userInfo = await getUserInfo();
           />
         </div>
 
-        <!-- TODO: Implement removing all data from TMDB -->
+        <!-- TODO: Implement removing all data from Google account -->
         <q-btn
           text-color="white"
-          label="Remove all data from The Movie Database (TMDB)"
+          label="Remove all Stream Stash data from your Google account"
           flat
           disable
           no-caps
