@@ -64,10 +64,7 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
 
       // Do not include secrets in production build
-      env:
-        process.env.NODE_ENV === 'production'
-          ? ''
-          : require('dotenv').config().parsed,
+      // env: {},
 
       // rawDefine: {}
       // ignorePublicFolder: true,
