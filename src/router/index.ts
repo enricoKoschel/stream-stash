@@ -5,6 +5,7 @@ import {
 } from 'vue-router';
 
 import routes from './routes';
+import { nextTick } from 'vue';
 
 /*
  * If not building with SSR mode, you can
@@ -25,7 +26,7 @@ const createHistory =
     ? createWebHistory
     : createWebHashHistory;
 
-export default createRouter({
+const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 }),
   routes,
 
@@ -34,3 +35,18 @@ export default createRouter({
   // quasar.conf.js -> build -> publicPath
   history: createHistory(process.env.VUE_ROUTER_BASE),
 });
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+router.afterEach((to, from) => {
+  void nextTick(() => {
+    if (typeof to.meta.title === 'function') {
+      document.title = to.meta.title(to) as string;
+    } else if (typeof to.meta.title === 'string') {
+      document.title = to.meta.title;
+    } else {
+      document.title = 'Stream Stash';
+    }
+  });
+});
+
+export default router;

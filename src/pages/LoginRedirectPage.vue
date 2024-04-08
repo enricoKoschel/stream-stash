@@ -16,8 +16,8 @@ if ('code' in query) {
   );
 }
 
-// Awaiting router.push() seems to not perform the navigation correctly for some reason
-void router.push({ name: 'indexPage' });
+// Awaiting router.replace() seems to not perform the navigation correctly for some reason
+void router.replace({ name: 'indexPage' });
 </script>
 
 <template>
