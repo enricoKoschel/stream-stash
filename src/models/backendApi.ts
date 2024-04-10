@@ -20,14 +20,14 @@ function genericApiError<T>(e: unknown, functionName: string): ApiResult<T> {
 export async function getUserInfo(): Promise<ApiResult<UserInfo>> {
   interface Response {
     logged_in: boolean;
-    username: string;
+    email: string;
   }
 
   try {
     const response = await api.get<Response>('/v1/userInfo');
 
     if (response.data.logged_in) {
-      return resultOk({ loggedIn: true, username: response.data.username });
+      return resultOk({ loggedIn: true, email: response.data.email });
     } else {
       return resultOk({ loggedIn: false });
     }

@@ -58,6 +58,4 @@ export interface Media extends MediaComment {
   backdropUrl: string | undefined;
 }
 
-export type UserInfo =
-  | { loggedIn: false }
-  | { loggedIn: true; username: string };
+export type UserInfo = { loggedIn: false } | { loggedIn: true; email: string };

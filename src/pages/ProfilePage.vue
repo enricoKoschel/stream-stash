@@ -10,9 +10,8 @@ const userInfo = await getUserInfo();
       <div style="font-size: 3rem">Profile</div>
 
       <div v-if="userInfo.success && userInfo.value.loggedIn">
-        <!-- TODO: Show username (email)? -->
         <div class="text-h6" style="margin-bottom: 30px">
-          You are logged in as {{ userInfo.value.username }}
+          You are logged in as {{ userInfo.value.email }}
         </div>
 
         <div style="margin: 10px">
