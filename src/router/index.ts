@@ -36,8 +36,8 @@ const router = createRouter({
   history: createHistory(process.env.VUE_ROUTER_BASE),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-router.afterEach((to, from) => {
+
+router.afterEach((to) => {
   void nextTick(() => {
     if (typeof to.meta.title === 'function') {
       document.title = to.meta.title(to) as string;
