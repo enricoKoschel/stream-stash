@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// Typescript can not resolve defineModel() for some reason
-// eslint-disable-next-line no-undef
 const model = defineModel<string>({ required: true });
 
 interface Props {
