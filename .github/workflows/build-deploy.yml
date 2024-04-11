@@ -37,5 +37,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "build/*"
+          source: "build/"
           target: "~/test"
+          rm: true
+          strip_components: 1
