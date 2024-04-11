@@ -11,7 +11,7 @@ import streamStashLogo from 'assets/logos/StreamStashTextAround.svg';
 
       <ImageWithFallback
         :src="streamStashLogo"
-        fallback-icon-size="10px"
+        fallback-icon-size="100px"
         style="width: 40rem"
         class="q-ma-lg q-mb-xl"
       />
