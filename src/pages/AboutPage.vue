@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ImageWithFallback from 'components/ImageWithFallback.vue';
+import tmdbLogo from 'assets/logos/TMDB.svg';
+import streamStashLogo from 'assets/logos/StreamStashTextAround.svg';
 </script>
 
 <template>
@@ -7,14 +9,21 @@ import ImageWithFallback from 'components/ImageWithFallback.vue';
     <div style="width: 100vw">
       <div style="font-size: 3rem">About</div>
 
+      <ImageWithFallback
+        :src="streamStashLogo"
+        fallback-icon-size="10px"
+        style="width: 40rem"
+        class="q-ma-lg q-mb-xl"
+      />
+
       <div class="row flex-center">
         <ImageWithFallback
-          src="src/assets/logos/TMDB.svg"
+          :src="tmdbLogo"
           fallback-icon-size="10px"
-          style="width: 3rem; margin-right: 1rem"
+          style="width: 4rem; margin-right: 1rem"
         />
 
-        <div>
+        <div class="text-body1">
           This product uses the
           <a href="https://themoviedb.org" target="_blank">TMDB</a> API but is
           not endorsed or certified by

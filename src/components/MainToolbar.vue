@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { useMediaStore } from 'stores/mediaStore';
 import { getUserInfo, googleLogin, logout } from 'src/models/backendApi';
+import ImageWithFallback from 'components/ImageWithFallback.vue';
+import streamStashLogo from 'assets/logos/StreamStashTextAround.svg';
 
 const searchText = ref('');
 
@@ -30,10 +32,13 @@ async function logoutClicked(): Promise<void> {
 <template>
   <q-toolbar class="bg-dark">
     <div class="row items-center" style="width: 100vw">
-      <!-- TODO: Replace with logo -->
-      <q-btn flat dense round icon="home" :to="{ name: 'indexPage' }" />
-
-      <q-toolbar-title shrink>Stream Stash</q-toolbar-title>
+      <router-link :to="{ name: 'indexPage' }">
+        <ImageWithFallback
+          :src="streamStashLogo"
+          fallback-icon-size="10px"
+          style="width: 16rem"
+        />
+      </router-link>
     </div>
 
     <div>
