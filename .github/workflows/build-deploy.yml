@@ -1,0 +1,20 @@
+name: Build & deploy
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install packages
+        run: |
+          yarn global add @quasar/cli
+          yarn install
+      - name: Build Quasar SPA
+        run: quasar build
+      - name: Print build output
+        run: ls ./dist
