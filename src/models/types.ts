@@ -59,3 +59,5 @@ export interface Media extends MediaComment {
 }
 
 export type UserInfo = { loggedIn: false } | { loggedIn: true; email: string };
+
+export type MediaRecord = Partial<Record<string, Media>>;

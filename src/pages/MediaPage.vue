@@ -44,13 +44,13 @@ async function ratingClicked(star: number, item: MediaHistory): Promise<void> {
     item.rating = star;
   }
 
-  await mediaStore.syncToDb(media);
+  await mediaStore.syncToDb();
 }
 
 async function watchStateChanged(watchState: WatchState): Promise<void> {
   media.watchState = watchState;
 
-  await mediaStore.syncToDb(media);
+  await mediaStore.syncToDb();
 }
 
 async function addHistory(): Promise<void> {
@@ -63,7 +63,7 @@ async function addHistory(): Promise<void> {
     name: 'Unnamed',
   };
 
-  await mediaStore.syncToDb(media);
+  await mediaStore.syncToDb();
 }
 
 function removeHistory(id: number): void {
@@ -71,7 +71,7 @@ function removeHistory(id: number): void {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete media.history[id];
 
-    await mediaStore.syncToDb(media);
+    await mediaStore.syncToDb();
   });
 }
 
@@ -81,7 +81,7 @@ async function historyNameChanged(
 ): Promise<void> {
   item.name = name;
 
-  await mediaStore.syncToDb(media);
+  await mediaStore.syncToDb();
 }
 
 async function historyDateChanged(
@@ -95,7 +95,7 @@ async function historyDateChanged(
     item.endDate = date;
   }
 
-  await mediaStore.syncToDb(media);
+  await mediaStore.syncToDb();
 }
 </script>
 
@@ -167,7 +167,7 @@ async function historyDateChanged(
 
         <q-card
           v-for="[id, item] in sortedHistory"
-          :key="item"
+          :key="JSON.stringify(item)"
           style="width: 40rem; margin: 1rem"
         >
           <q-card-section class="row">

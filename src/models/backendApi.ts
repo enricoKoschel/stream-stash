@@ -1,9 +1,10 @@
-import { BaseError, Result, UserInfo } from 'src/models/types';
+import { BaseError, MediaRecord, Result, UserInfo } from 'src/models/types';
 import {
   createErrorDialog,
   ensureError,
   resultErr,
   resultOk,
+  safeJsonParse,
 } from 'src/models/methods';
 import { api } from 'boot/axios';
 
@@ -69,5 +70,40 @@ export async function logout(): Promise<ApiResult<void>> {
     return resultOk(undefined);
   } catch (e) {
     return genericApiError(e, 'logout');
+  }
+}
+
+export async function updateMedia(
+  media: MediaRecord,
+): Promise<ApiResult<void>> {
+  try {
+    await api.post<never>('/v1/updateMedia', { media: JSON.stringify(media) });
+
+    return resultOk(undefined);
+  } catch (e) {
+    return genericApiError(e, 'updateMedia');
+  }
+}
+
+export async function getMedia(): Promise<ApiResult<MediaRecord>> {
+  interface Response {
+    media: string;
+  }
+
+  try {
+    const response = await api.get<Response>('/v1/getMedia');
+
+    // Parsing twice is intended here because of weirdness happening in the backend
+    const json = safeJsonParse<MediaRecord>(
+      safeJsonParse<string>(response.data.media) ?? '',
+    );
+
+    if (json === undefined) {
+      throw new BaseError('Invalid JSON received from /v1/getMedia endpoint');
+    }
+
+    return resultOk(json);
+  } catch (e) {
+    return genericApiError(e, 'getMedia');
   }
 }

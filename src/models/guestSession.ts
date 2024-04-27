@@ -1,6 +1,6 @@
-import { Media } from 'src/models/types';
+import { MediaRecord } from 'src/models/types';
 
-const media: Partial<Record<string, Media>> = {
+const media: MediaRecord = {
   'tv:37854': {
     id: 37854,
     mediaType: 'tv',
