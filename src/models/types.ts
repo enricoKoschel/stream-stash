@@ -44,7 +44,7 @@ export interface MediaHistory {
 
 export interface MediaComment {
   watchState: WatchState;
-  history: Partial<Record<number, MediaHistory>>;
+  history: MediaHistory[];
 }
 
 export interface Media extends MediaComment {

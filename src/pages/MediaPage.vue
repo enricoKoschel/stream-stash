@@ -8,7 +8,6 @@ import {
 } from 'src/models/types';
 import { useMediaStore } from 'stores/mediaStore';
 import { capitalizeFirstLetter, createConfirmDialog } from 'src/models/methods';
-import { computed } from 'vue';
 import PopupTextEdit from 'components/PopupTextEdit.vue';
 
 // Typescript can not resolve defineModel() for some reason
@@ -18,20 +17,6 @@ const model = defineModel<Media>({ required: true });
 const mediaStore = useMediaStore();
 
 const media = model.value;
-
-const sortedHistory = computed(() => {
-  // Preserve number as key type
-  const entries = Object.entries(media.history) as unknown as [
-    number,
-    MediaHistory,
-  ][];
-
-  entries.sort((a, b) => {
-    return b[0] - a[0];
-  });
-
-  return entries;
-});
 
 function ratingColor(star: number, item: MediaHistory): string {
   return item.rating >= star ? 'primary' : 'white';
@@ -54,22 +39,20 @@ async function watchStateChanged(watchState: WatchState): Promise<void> {
 }
 
 async function addHistory(): Promise<void> {
-  const id = Object.keys(media.history).length;
-
-  media.history[id] = {
+  media.history.unshift({
     rating: 0,
     startDate: '??.??.????',
     endDate: '??.??.????',
     name: 'Unnamed',
-  };
+  });
 
   await mediaStore.syncToDb();
 }
 
-function removeHistory(id: number): void {
+function removeHistory(history: MediaHistory): void {
   createConfirmDialog('Do you really want to delete?', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete media.history[id];
+    const index = media.history.indexOf(history);
+    media.history.splice(index, 1);
 
     await mediaStore.syncToDb();
   });
@@ -166,7 +149,7 @@ async function historyDateChanged(
         </q-card>
 
         <q-card
-          v-for="[id, item] in sortedHistory"
+          v-for="item in media.history"
           :key="JSON.stringify(item)"
           style="width: 40rem; margin: 1rem"
         >
@@ -198,7 +181,7 @@ async function historyDateChanged(
               icon="delete_forever"
               flat
               class="col-1 offset-3 text-negative no-padding"
-              @click="removeHistory(id)"
+              @click="removeHistory(item)"
             />
           </q-card-section>
 

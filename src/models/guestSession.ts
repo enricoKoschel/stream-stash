@@ -14,7 +14,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//2rmK7mnchw9Xr3XdiTFSxTTLXqv.jpg',
     watchState: 'watching',
-    history: {},
+    history: [],
   },
   'tv:1396': {
     id: 1396,
@@ -29,7 +29,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//9faGSFi5jam6pDWGNd0p8JcJgXQ.jpg',
     watchState: 'watching',
-    history: {},
+    history: [],
   },
   'movie:671': {
     id: 671,
@@ -44,7 +44,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//hziiv14OpD73u9gAak4XDDfBKa2.jpg',
     watchState: 'watched',
-    history: {},
+    history: [],
   },
   'tv:1399': {
     id: 1399,
@@ -59,7 +59,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//rIe3PnM6S7IBUmvNwDkBMX0i9EZ.jpg',
     watchState: 'watched',
-    history: {},
+    history: [],
   },
   'movie:695721': {
     id: 695721,
@@ -74,7 +74,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//e0M3WVJm4nBrAg0LbJq0gdKi3U7.jpg',
     watchState: 'planning',
-    history: {},
+    history: [],
   },
   'tv:63174': {
     id: 63174,
@@ -89,7 +89,7 @@ const media: MediaRecord = {
     backdropUrl:
       'https://image.tmdb.org/t/p/w1920_and_h1080_bestv2//aDBRtunw49UF4XmqfyNuD9nlYIu.jpg',
     watchState: 'planning',
-    history: {},
+    history: [],
   },
 };
 
