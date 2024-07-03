@@ -47,17 +47,27 @@ export interface MediaComment {
   history: MediaHistory[];
 }
 
-export interface Media extends MediaComment {
+export interface Media {
   id: number;
   mediaType: MediaType;
   key: string;
   title: string;
+  originalTitle: string;
   overview: string;
   date: string;
-  posterUrl: string | undefined;
-  backdropUrl: string | undefined;
+  posterUrl: string | null;
+  backdropUrl: string | null;
+}
+
+export type MediaWithComment = Media & MediaComment;
+
+export interface SearchResult {
+  page: number;
+  results: Media[];
+  totalPages: number;
+  totalResults: number;
 }
 
 export type UserInfo = { loggedIn: false } | { loggedIn: true; email: string };
 
-export type MediaRecord = Partial<Record<string, Media>>;
+export type MediaRecord = Partial<Record<string, MediaWithComment>>;

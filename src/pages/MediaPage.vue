@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ImageWithFallback from 'components/ImageWithFallback.vue';
 import {
-  Media,
   MediaHistory,
+  MediaWithComment,
   WatchState,
   watchStateArray,
 } from 'src/models/types';
@@ -10,9 +10,7 @@ import { useMediaStore } from 'stores/mediaStore';
 import { capitalizeFirstLetter, createConfirmDialog } from 'src/models/methods';
 import PopupTextEdit from 'components/PopupTextEdit.vue';
 
-// Typescript can not resolve defineModel() for some reason
-// eslint-disable-next-line no-undef
-const model = defineModel<Media>({ required: true });
+const model = defineModel<MediaWithComment>({ required: true });
 
 const mediaStore = useMediaStore();
 

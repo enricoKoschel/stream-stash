@@ -79,6 +79,22 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/LoginRedirectPage.vue'),
   },
   {
+    path: '/search/:query',
+    name: '',
+    meta: {
+      title: 'Search',
+    },
+    component: () => import('layouts/MediaLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'searchPage',
+        component: () => import('pages/SearchPage.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
     path: '/notFound',
     name: 'errorNotFound',
     meta: {

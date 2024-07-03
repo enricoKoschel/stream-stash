@@ -4,6 +4,9 @@ import { useMediaStore } from 'stores/mediaStore';
 import { getUserInfo, googleLogin, logout } from 'src/models/backendApi';
 import ImageWithFallback from 'components/ImageWithFallback.vue';
 import streamStashLogo from 'assets/logos/StreamStashTextAround.svg';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const searchText = ref('');
 
@@ -27,6 +30,16 @@ async function logoutClicked(): Promise<void> {
   await logout();
   location.reload();
 }
+
+function search(): void {
+  // Awaiting router.push() seems to not perform the navigation correctly for some reason
+  void router.push({
+    name: 'searchPage',
+    params: {
+      query: searchText.value,
+    },
+  });
+}
 </script>
 
 <template>
@@ -48,6 +61,7 @@ async function logoutClicked(): Promise<void> {
         clearable
         dense
         style="width: 30rem"
+        @keyup.enter="search()"
       >
         <template #prepend>
           <q-icon name="search" />

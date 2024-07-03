@@ -18,16 +18,14 @@ const mediaStore = useMediaStore();
 
 const media = mediaStore.allMedia[constructMediaKey(props.mediaType, props.id)];
 
-const mediaExists = media !== undefined;
-
-if (!mediaExists) {
+if (media === undefined) {
   // Awaiting router.push() seems to not perform the navigation correctly for some reason
   void router.push({ name: 'errorNotFound' });
 }
 </script>
 
 <template>
-  <MediaPage v-if="mediaExists" v-model="media" />
+  <MediaPage v-if="media !== undefined" v-model="media" />
 </template>
 
 <style scoped lang="scss"></style>

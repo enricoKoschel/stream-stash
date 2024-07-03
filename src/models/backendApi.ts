@@ -1,4 +1,11 @@
-import { BaseError, MediaRecord, Result, UserInfo } from 'src/models/types';
+import {
+  BaseError,
+  MediaRecord,
+  MediaType,
+  Result,
+  SearchResult,
+  UserInfo,
+} from 'src/models/types';
 import {
   createErrorDialog,
   ensureError,
@@ -105,5 +112,113 @@ export async function getMedia(): Promise<ApiResult<MediaRecord>> {
     return resultOk(json);
   } catch (e) {
     return genericApiError(e, 'getMedia');
+  }
+}
+
+export async function movieSearch(
+  query: string,
+  page: number,
+): Promise<ApiResult<SearchResult>> {
+  interface Response {
+    page: number;
+    results: {
+      id: number;
+      media_type: MediaType;
+      key: string;
+      title: string;
+      original_title: string;
+      overview: string;
+      date: string;
+      poster_url: string | null;
+      backdrop_url: string | null;
+    }[];
+    total_pages: number;
+    total_results: number;
+  }
+
+  try {
+    const response = await api.get<Response>('/v1/movieSearch', {
+      params: {
+        query,
+        page,
+      },
+    });
+
+    const results = response.data.results.map((movie) => {
+      return {
+        id: movie.id,
+        mediaType: movie.media_type,
+        key: movie.key,
+        title: movie.title,
+        originalTitle: movie.original_title,
+        overview: movie.overview,
+        date: movie.date,
+        posterUrl: movie.poster_url,
+        backdropUrl: movie.backdrop_url,
+      };
+    });
+
+    return resultOk({
+      page: response.data.page,
+      results,
+      totalPages: response.data.total_pages,
+      totalResults: response.data.total_results,
+    });
+  } catch (e) {
+    return genericApiError(e, 'movieSearch');
+  }
+}
+
+export async function tvSearch(
+  query: string,
+  page: number,
+): Promise<ApiResult<SearchResult>> {
+  interface Response {
+    page: number;
+    results: {
+      id: number;
+      media_type: MediaType;
+      key: string;
+      title: string;
+      original_title: string;
+      overview: string;
+      date: string;
+      poster_url: string | null;
+      backdrop_url: string | null;
+    }[];
+    total_pages: number;
+    total_results: number;
+  }
+
+  try {
+    const response = await api.get<Response>('/v1/tvSearch', {
+      params: {
+        query,
+        page,
+      },
+    });
+
+    const results = response.data.results.map((tv) => {
+      return {
+        id: tv.id,
+        mediaType: tv.media_type,
+        key: tv.key,
+        title: tv.title,
+        originalTitle: tv.original_title,
+        overview: tv.overview,
+        date: tv.date,
+        posterUrl: tv.poster_url,
+        backdropUrl: tv.backdrop_url,
+      };
+    });
+
+    return resultOk({
+      page: response.data.page,
+      results,
+      totalPages: response.data.total_pages,
+      totalResults: response.data.total_results,
+    });
+  } catch (e) {
+    return genericApiError(e, 'tvSearch');
   }
 }

@@ -23,7 +23,7 @@ const props = defineProps<Props>();
       class="img_main"
     />
 
-    <div class="img_text flex flex-center" style="">
+    <div class="img_text flex flex-center">
       <p style="text-align: center">
         {{ props.media.title }} <br />
         ({{ props.media.date.slice(0, 4) }})
@@ -32,6 +32,7 @@ const props = defineProps<Props>();
   </router-link>
 </template>
 
+<!-- TODO: Complete style overhaul, don't specify size or margin in here, specify where MediaCard is used -->
 <style scoped lang="scss">
 @import 'src/css/quasar.variables';
 

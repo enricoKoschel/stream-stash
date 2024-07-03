@@ -2,7 +2,7 @@
 import BrokenImage from 'components/BrokenImage.vue';
 
 interface Props {
-  src: string | undefined;
+  src: string | undefined | null;
   fallbackIconSize: string;
 }
 
