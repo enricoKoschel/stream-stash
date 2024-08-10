@@ -26,6 +26,7 @@ const filteredMedia: ComputedRef<Media[]> = computed(() => {
 <template>
   <q-page class="row">
     <template v-if="filteredMedia.length > 0">
+      <!-- FIXME: Gap between rows -->
       <MediaCard v-for="item in filteredMedia" :key="item.key" :media="item" />
     </template>
     <div v-else class="flex justify-center" style="width: 100%; margin-top: 1%">

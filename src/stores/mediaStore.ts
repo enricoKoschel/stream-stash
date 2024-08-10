@@ -30,6 +30,9 @@ export const useMediaStore = defineStore('media', {
       this.allMedia = media.value;
     },
     async syncToDb(): Promise<void> {
+      const userInfo = await getUserInfo();
+      if (!userInfo.success || !userInfo.value.loggedIn) return;
+
       // TODO: Batch multiple edits and send those edits to backend after x seconds?
       this.numberOfUploads++;
 

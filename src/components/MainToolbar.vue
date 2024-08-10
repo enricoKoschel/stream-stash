@@ -4,11 +4,16 @@ import { useMediaStore } from 'stores/mediaStore';
 import { getUserInfo, googleLogin, logout } from 'src/models/backendApi';
 import ImageWithFallback from 'components/ImageWithFallback.vue';
 import streamStashLogo from 'assets/logos/StreamStashTextAround.svg';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 
-const searchText = ref('');
+// Populate with text from last search if on search page
+const searchText =
+  route.name === 'searchPage'
+    ? ref((route.params.query as string | undefined) ?? '')
+    : ref('');
 
 const mediaStore = useMediaStore();
 
@@ -32,6 +37,8 @@ async function logoutClicked(): Promise<void> {
 }
 
 function search(): void {
+  if (searchText.value === '') return;
+
   // Awaiting router.push() seems to not perform the navigation correctly for some reason
   void router.push({
     name: 'searchPage',
@@ -63,8 +70,8 @@ function search(): void {
         style="width: 30rem"
         @keyup.enter="search()"
       >
-        <template #prepend>
-          <q-icon name="search" />
+        <template #append>
+          <q-icon name="search" class="cursor-pointer" @click="search()" />
         </template>
       </q-input>
     </div>

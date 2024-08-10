@@ -50,6 +50,8 @@ async function addHistory(): Promise<void> {
 function removeHistory(history: MediaHistory): void {
   createConfirmDialog('Do you really want to delete?', async () => {
     const index = media.history.indexOf(history);
+    if (index === -1) return;
+
     media.history.splice(index, 1);
 
     await mediaStore.syncToDb();
@@ -96,6 +98,7 @@ async function historyDateChanged(
           style="border-radius: 5px; width: 12rem; height: 18rem"
         />
 
+        <!-- TODO: Add delete icon here -->
         <q-select
           dense
           item-aligned
