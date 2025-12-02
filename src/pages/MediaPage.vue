@@ -167,7 +167,7 @@ async function historyDateChanged(
 
         <q-card
           v-for="[id, item] in sortedHistory"
-          :key="item"
+          :key="JSON.stringify(item)"
           style="width: 40rem; margin: 1rem"
         >
           <q-card-section class="row">
